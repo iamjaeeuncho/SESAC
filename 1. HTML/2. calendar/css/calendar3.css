@@ -1,0 +1,39 @@
+#menu {
+    width: 80%;
+    text-align: center;
+}
+
+#menu td {
+    font-size: 26px;
+    font-weight: 800;
+    padding: 30px
+}
+
+#calendar {
+    width: 80%;
+    height: 200px;
+}
+
+#calendar th {
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+#calendar td {
+    text-align: center;
+    border: 1px solid;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+#calendar th:first-child, 
+#calendar td:first-child {
+    color: red;
+}
+
+#calendar th:last-child, 
+#calendar td:last-child {
+    color: blue;
+}

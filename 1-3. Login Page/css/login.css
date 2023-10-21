@@ -1,0 +1,32 @@
+* {
+    font-size: 14px;
+}
+
+#login {
+    width: 30%;
+    margin: 100px auto;
+    padding: 30px;
+    border: 1px solid gray;
+}
+
+#form {
+    width: 80%;
+    padding: 30px;
+    border: 1px solid gray;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+    letter-spacing: 0.3rem;
+}
+
+input[type=text], input[type=password] {
+    width: 90%;
+    margin: 10px 0;
+}
+
+input[type=button] {
+    width: 92%;
+    margin: 10px 0;
+}

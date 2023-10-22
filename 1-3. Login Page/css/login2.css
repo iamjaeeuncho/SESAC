@@ -6,13 +6,11 @@
     width: 30%;
     margin: 100px auto;
     padding: 30px;
-    border: 1px solid gray;
 }
 
 #form {
     width: 80%;
     padding: 30px;
-    border: 1px solid gray;
 }
 
 h1 {
@@ -22,14 +20,23 @@ h1 {
 }
 
 input[type=text], input[type=password] {
-    width: 90%;
+    width: 100%;
+    height: 30px;
     margin-top: 10px;
     margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(225, 225, 225);
+    outline: none;
 }
 
 input[type=button] {
-    width: 92%;
+    width: 100%;
+    height: 30px;
     margin-top: 10px;
     margin-bottom: 20px;
-    background-color: bla;
+    border: none;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
 }

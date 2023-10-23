@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>입력폼 만들기</h1>
+        <p>
+            <label>아이디</label>
+            <input type="text" placeholder="아이디를 입력하세요"><br>
+            <label>비밀번호</label>
+            <input type="password" placeholder="비밀번호를 입력하세요"><br>
+            <label>Captcha</label>
+            <input type="number" placeholder="숫자를 입력하세요"><br>
+            <input type="button" value="로그인">
+        </p>
+
+        <h1>선택박스</h1>
+        <p>
+            과목고르기
+            <input type="radio" name="subject" value="korean">국어
+            <input type="radio" name="subject" value="english">영어
+            <input type="radio" name="subject" value="math">수학
+        </p>
+        <p>
+            과일고르기
+            <input type="radio" name="fruit" value="strawberry">딸기
+            <input type="radio" name="fruit" value="grape">포도
+            <input type="radio" name="fruit" value="apple">사과
+        </p>
+        <p>
+            메뉴고르기
+            <input type="radio" name="fruit" value="cutlet">돈까스
+            <input type="radio" name="fruit" value="hamburger">햄버거
+            <input type="radio" name="fruit" value="sandwich">샌드위치
+        </p>
+        <p>
+            풀다운 음료고르기 - 1개 선택 가능<br>
+            <select size="3">
+                <option>콜라</option>
+                <option>사이다</option>
+                <option>환타</option>
+                <option>닥터페퍼</option>
+                <option>주스</option>
+                <option>우유</option>
+            </select>
+        </p>
+        <p>
+            풀다운 음료고르기 - ctrl누르면 n개 선택 가능<br>
+            <select size="3" multiple>
+                <option>콜라</option>
+                <option>사이다</option>
+                <option>환타</option>
+                <option>닥터페퍼</option>
+                <option>주스</option>
+                <option>우유</option>
+            </select>
+        </p>
+        <h1>프로그래스바</h1>
+        <progress value="10" max="100">60%</progress>
+    </body>
+</html>

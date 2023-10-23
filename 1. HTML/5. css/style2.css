@@ -4,18 +4,6 @@
 
 .rgb-black {color: rgb(0,0,0)}
 
-h3, h4 {
-    color: green;
-    border-top: 5px dotted black;
-    border-bottom: 20px dashed orange;
-    border-right: 10px double navy;
-    border-left: 15px solid greenyellow;
-    margin: 50px;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    background-image: url("../images/sea.jpg");
-    background-size: 100%;
-}
 
 li {
     color: brown;

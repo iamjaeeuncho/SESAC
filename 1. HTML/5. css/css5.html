@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            div {
+                width: 100px;
+                height: 100px;
+                color: white;
+                position: relative;
+            }
+
+            .div1 {
+                background-color: orange;
+                z-index: 1;
+            }
+
+            .div2 {
+                background-color: red;
+                bottom: 50px;
+                z-index: 2;
+            }
+
+            
+            .div3 {
+                background-color: blue;
+                bottom: 100px;
+                z-index: 3;
+            }
+
+            
+            .div4 {
+                background-color: yellow;
+                bottom: 150px;
+                z-index: 4;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Z-Index를 통한 레이어 계종 변경</h1>
+        <div class="div div1">ORANGE</div>
+        <div class="div div2">RED</div>
+        <div class="div div3">BLUE</div>
+        <div class="div div4">YELLOW</div>
+    </body>
+</html>

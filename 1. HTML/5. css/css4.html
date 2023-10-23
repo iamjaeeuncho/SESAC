@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .bg {
+                height: 300px;
+                background-color: orange;
+            }
+
+            .center {
+                background-color: orangered;
+            }
+
+            .fixed {
+                width: 100px;
+                height: 100px;
+                background-color: teal;
+                position: fixed;
+                bottom: 50px;
+                right: 50px;
+                border-radius: 100px;
+                /* display: none; */
+            }
+
+            .relative {
+                width: 100px;
+                height: 100px;
+                background-color: blueviolet;
+                position: relative;
+                top: 50px;
+                left: 50px;
+            }
+
+            h1 {
+                color: white;
+                text-align: center;
+                font-weight: 1000;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 우선순위: 인라인 > id > class -->
+        <div class="bg" style="background-color: green;"></div>
+        <div class="bg center"></div>
+        <div class="bg"></div>
+        <div class="fixed"><h1>♥</h1></div>
+        <div class="relative"></div>
+    </body>
+</html>

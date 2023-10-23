@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            ul {
+                list-style-type: none;
+            }
+
+            ul#secondul > li::before {
+                content: "x";
+                width: 10px;
+                margin-right: 5px;
+            }
+
+            .element::before {
+                content: "★";
+                color: red;
+            }
+
+            .element::after {
+                content: "★";
+                color: blue;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <ul id="firstul">
+                <li class="element">아메리카노</li>
+                <ul id="secendul">
+                    <li>차가운</li>
+                    <li>뜨거운</li>
+                </ul>
+                <li class="element">카푸치노</li>
+                <li class="element">에스프레소</li>
+            </ul>
+        </div>
+    </body>
+</html>

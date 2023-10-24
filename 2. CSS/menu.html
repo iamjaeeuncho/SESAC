@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            header {
+                background-color: #333;
+                color: white;
+                padding: 10px;
+            }
+
+            ul {
+                list-style-type: none;
+            }
+
+            ul li {
+                display: inline-block;
+                margin-right: 20px;
+            }
+
+            ul > li > a {
+                color: white;
+                text-decoration: none;
+            }
+
+            .submenu {
+                display: none;
+            }
+
+            .submenu ul {
+                display: block;
+                margin: 0;
+                padding: 0;
+            }
+
+            ul li:hover .submenu {
+                display: block;
+                position: absolute;
+                background-color: #333;
+                margin-top: 5px;
+            }
+
+            .submenu ul {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href=#>홈</a></li>
+                    <li><a href=#>메뉴1</a>
+                        <div class="submenu">
+                            <ul>
+                                <li><a href=#>서브메뉴1</a></li>
+                                <li><a href=#>서브메뉴2</a></li>
+                                <li><a href=#>서브메뉴3</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href=#>메뉴2</a></li>
+                    <li><a href=#>메뉴3</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <h1>페이지 제목</h1>
+            <p>가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 가나다라마바사아자차카타파하 </p>
+        </main>
+    </body>
+</html>

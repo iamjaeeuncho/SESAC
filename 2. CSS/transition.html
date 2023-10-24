@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .square {
+                width: 100px;
+                height: 100px;
+                background-color: red;
+                transition-property: width, height;
+                transition-duration: 1s;
+                transition-timing-function: ease;
+                /* ease, linear, ease-in, ease-out, ease-in-out */
+            }
+
+            .square:hover {
+                width: 150px;
+                height: 150px;
+            }
+
+            .button {
+                color: black;
+                transition-property: color;
+                transition-duration: 1s;
+                transition-timing-function: ease-out;
+            }
+
+            .button:hover {
+                color: red;
+            }
+
+            .image {
+                width: 200px;
+                height: 200px;
+                transition-property: transform;
+                transition-duration: 2s;
+                transition-timing-function: ease-in-out;
+            }
+
+            .image:hover {
+                transform: rotate(180deg);
+            }
+
+            .gradient {
+                background: linear-gradient(to right, green, purple);
+                transition-property: background-image;
+                transition-duration: 2s;
+                transition-timing-function: ease-in-out;
+            }
+
+            .gradient:hover {
+                background: linear-gradient(to right, yellow, skyblue)
+            }
+        </style>
+    </head>
+    <body>
+        <div class="square"></div><br><br>
+        <button class="button">Hover Me</button><br><br>
+        <img class="image" src="images/sea.jpg" alt="Sea"><br><br>
+        <div class="gradient">Hover me for gradient effect</div>
+    </body>
+</html>

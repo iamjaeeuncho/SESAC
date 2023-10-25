@@ -1,0 +1,92 @@
+* {
+    font-size: 14px;
+}
+
+
+.width50 {
+    width: 50%;
+}
+
+.width80 {
+    width: 80%;
+}
+
+
+.center {
+    margin: 0 auto;
+}
+
+.padding {
+    padding: 30px;
+}
+
+.border {
+    border: 1px solid gray;
+}
+
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+    letter-spacing: 0.3rem;
+}
+
+input[type=text], input[type=password] {
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+input[type=button] {
+    width: 92%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
+.fixed {
+    position: fixed;
+}
+
+
+.square {
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+
+.square:hover {
+    animation-name: moveLeft;
+    animation-duration: 2s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.red {
+    background-color: red; 
+}
+
+.orange {
+    background-color: orange; 
+}
+
+.yellow {
+    background-color: yellow; 
+}
+
+.green {
+    background-color: green; 
+}
+
+.blue {
+    background-color: blue; 
+}
+
+.navy {
+    background-color: navy; 
+}
+
+.violet {
+    background-color: violet; 
+}

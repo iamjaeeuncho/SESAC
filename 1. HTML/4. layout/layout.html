@@ -2,9 +2,9 @@
 <html>
     <head>
         <style>
-            /* * {
+            * {
                 box-sizing: border-box;
-            } */
+            }
             
             header {
                 background-color: #555;
@@ -16,17 +16,15 @@
             nav {
                 background-color: #ccc;
                 float: left;
-                width: 28%;
+                width: 30%;
                 height: 300px;
-                padding: 1%;
             }
 
             article {
                 background-color: #f1f1f1;
                 float: left;
-                width: 68%;
+                width: 70%;
                 height: 300px;
-                padding: 1%;
             }
 
             footer {
@@ -34,6 +32,12 @@
                 text-align: center;
                 color: white;
                 padding: 10px;
+            }
+
+            @media (max-width: 600px) {
+                nav, article {
+                    width: 100%;
+                }
             }
         </style>
     </head>

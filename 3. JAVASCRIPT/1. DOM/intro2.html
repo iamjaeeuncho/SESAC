@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>DOM/JS 이해하기</h1>
+        <p>DOM이 무엇인지 배워봅시다</p>
+
+        <button type="button" onclick="alert('clicked!')">CLICK ME</button>
+
+        <p id="demo"></p>
+        <button type="button" onclick="document.getElementById('demo').innerHTML = Date()">CLICK ME</button>
+
+        <h1>버튼을 통한 값 변경</h1>
+        <div id="result">0</div>
+        <div>
+            <button onclick="number_inc()">증가</button>
+            <button onclick="number_dec()">감소</button>
+        </div>
+
+        <script src="intro2.js"></script>
+    </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <p id="myText">이 곳에 글자를 입력하시오</p>
+    <button onclick="changeColorRed()">빨강색</button>
+    <button onclick="changeColorBlue()">파랑색</button>
+    <button onclick="changeColor()">색변경</button>
+    <button onclick="addElement()">내용 추가</button>
+    <button onclick="deleteElement()">내용 삭제</button><br><br>
+    <button onclick="myfunction()">내 함수</button>
+
+    <script>
+        function changeColorRed() {
+            var textElement = document.getElementById("myText");
+            textElement.style.color = "red";
+        }
+        function changeColorBlue() {
+            var textElement = document.getElementById("myText");
+            textElement.style.color = "blue";
+        }
+
+        function changeColor() {
+            var textElement = document.getElementById("myText");
+            var currentColor = textElement.style.color;
+            console.log(currentColor)
+
+            if (currentColor === "red" || currentColor === "") {
+                textElement.style.color = "blue";
+            } else if (currentColor === "blue") {
+                textElement.style.color = "red";
+            }
+        }
+
+        function addElement() {
+            var newDiv = document.createElement("div");
+            newDiv.textContent = "새로운 내용";
+            document.body.appendChild(newDiv);
+        }
+
+        function deleteElement() {
+            var rmvDiv = document.querySelector('div');
+            rmvDiv.remove(rmvDiv);
+        }
+
+        function myfunction() {
+            // print();
+            // window.open();
+            // window.close();
+            console.log(screen.width, screen.height);
+            console.log(window.width, window.height);
+        }
+
+        // element.innerText : 태그 안의 글자
+        // element.style : 요소의 css
+
+        // getElementbyId
+        // getElementbyClass : 여러개일 경우 첫번째꺼
+        // getElementsbyClass : 여러개일 경우 모든 것
+        // getElementsbyTagName
+        // querySelector : document 내의 요소를 검색하고 여러 결과를 찾았다면 첫 번째 요소만 리턴
+
+    </script>
+</body>
+
+</html>

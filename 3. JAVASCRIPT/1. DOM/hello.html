@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>헬로우JS</h1>
+        <button onclick="sayHello()">HelloJS</button>
+
+        <select id="fruit" onchange="fruitDisplay()">
+            <option value="apple">Apple</option>
+            <option value="banana">Banana</option>
+            <option value="orange">Orange</option>
+        </select>
+
+        <script>
+            function fruitDisplay() {
+                result = document.getElementById('fruit').value;
+                console.log(result);
+
+                switch (result) {
+                    case 'apple':
+                        document.write('사과 선택');
+                        break;
+                    case 'banana':
+                        document.write('바나나 선택');
+                        break;
+                    case 'orange':
+                        document.write('오렌지 선택');
+                        break;
+                }
+            }
+
+            function sayHello() {
+                console.log('Hello');
+                // document.write('Hello');
+
+                // myTag = document.createElement('p');
+                // document.body.append(myTag);
+            }
+        </script>
+    </body>
+</html>

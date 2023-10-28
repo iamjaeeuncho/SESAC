@@ -1,0 +1,23 @@
+.mainbox {
+    width: 40%;
+    padding: 5%;
+    margin: 0 auto;
+    border: solid 1px black;
+}
+
+input {
+    width: 92%;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.box {
+    width: 18%;
+    height: 40px;
+    margin: 2%;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+}
+

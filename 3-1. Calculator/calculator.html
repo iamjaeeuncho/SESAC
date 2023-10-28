@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calculator</title>
+        <link rel="stylesheet" href="calculator.css">
+        <script src="calculator.js"></script>
+    </head>
+    <body>
+        <div class="mainbox">
+            <input type="text" id="status"><br>
+            <button type="button" class="box" onclick="plus()">+</button>
+            <button type="button" class="box" onclick="minus()">-</button>
+            <button type="button" class="box" onclick="multiply()">*</button>
+            <button type="button" class="box" onclick="divide()">/</button><br>
+            <button type="button" class="box" value="7" onclick="number(this.value)">7</button>
+            <button type="button" class="box" value="8" onclick="number(this.value)">8</button>
+            <button type="button" class="box" value="9" onclick="number(this.value)">9</button>
+            <button type="button" class="box" onclick="total()">=</button><br>
+            <button type="button" class="box" value="4" onclick="number(this.value)">4</button>
+            <button type="button" class="box" value="5" onclick="number(this.value)">5</button>
+            <button type="button" class="box" value="6" onclick="number(this.value)">6</button>
+            <button type="button" class="box" onclick="remove()">C</button><br>
+            <button type="button" class="box" value="1" onclick="number(this.value)">1</button>
+            <button type="button" class="box" value="2" onclick="number(this.value)">2</button>
+            <button type="button" class="box" value="3" onclick="number(this.value)">3</button>
+            <button type="button" class="box" value="0" onclick="number(this.value)">0</button><br>
+        </div>
+    </body>
+</html>

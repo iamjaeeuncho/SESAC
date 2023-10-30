@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .box {
+                width: 200px;
+                height: 200px;
+                position: absolute;
+                transition: opacity 0.3s;
+            }
+
+            .box1 {
+                background-color: blue;
+                left: 100px;
+                top: 50px;
+                z-index: 2; /* 박스 1을 박스 2 위로 겹치게 함 */
+            }
+
+            .box2 {
+                background-color: green;
+                left: 100px;
+                top: 100px;
+                z-index: 1; /* 박스 2를 박스 1 아래로 겹치게 함 */
+            }
+
+            .box1:hover {
+                opacity: 0.7;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="box box1"></div>
+        <div class="box box2"></div>
+    </body>
+</html>

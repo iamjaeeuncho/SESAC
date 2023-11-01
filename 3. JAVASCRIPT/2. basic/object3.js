@@ -15,23 +15,33 @@ const numbers = [10, 20, 30, 5, 3, 1]
 // numbers에서 가장 큰 숫자 찾기
 
 function max_numbers(numbers) {
-    let result = 0
-    for (let i = 0; i < numbers.length; i++) {
+    let result = numbers[0]
+    for (let i = 1; i < numbers.length; i++) {
         if (numbers[i] > result) {
             result = numbers[i]
         }
     }
-    console.log(result)
+    return result;
 }
 
 function min_numbers(numbers) {
-    let result = 0
-    for (let i = 0; i < numbers.length; i++) {
+    let result = numbers[0]
+    for (let i = 1; i < numbers.length; i++) {
         if (numbers[i] < result) {
             result = numbers[i]
         }
     }
-    console.log(result)
+    return result;
+}
+
+function avg_numbers(numbers) {
+    let result = numbers[0]
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] < result) {
+            result += numbers[i]
+        }
+    }
+    return result/numbers.length;
 }
 
 // ---------- 선생님 답 ----------
@@ -53,9 +63,18 @@ console.log('MAX :', max_num);
 let min_num = min_numbers(numbers);
 console.log('MIN : ', min_num);
 
+let avg_num = avg_numbers(numbers);
+console.log('AVG : ', avg_num);
+
+
+
 
 // 3. String
 const text = 'Hello World';
 console.log(text.length);
 console.log(text.toUpperCase());
 console.log(text.toLowerCase());
+
+console.log(text.split(" "));
+console.log(text.concat("!"));
+console.log(text.includes('wow'));

@@ -20,8 +20,9 @@ fs.readFile('example.txt', 'utf8', (err, data) => {
 
 
 // 파일쓰기
+// sync를 쓰면 지금 당장 실행해달라고 요청
 const content = "파일에 쓰고 싶은 내용";
-fs.writeFile('newFile.txt', content, 'utf8', (err) => {
+fs.writeFileSync('newFile.txt', content, 'utf8', (err) => {
     if (err) {
         console.error('파일을 쓰는데 오류가 발생했습니다.', err);
         return;
@@ -38,3 +39,5 @@ fs.copyFile('newFile.txt', 'newFile2.txt', (err) => {
     }
     console.log("파일이 성공적으로 복사되었습니다.");
 })
+
+

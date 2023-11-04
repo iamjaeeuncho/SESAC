@@ -1,9 +1,9 @@
-const Person = require('./calculator');
+import Calculator from "./calculator.js";
 
 class EngineeringCal extends Calculator {
-    log(a, b) {
+    logarithm() {
         return '로그'
     }
 }
 
-module.exports = EngineeringCal;
+export default EngineeringCal;

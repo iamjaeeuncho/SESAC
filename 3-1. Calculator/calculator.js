@@ -20,8 +20,7 @@ function divide(){
 
 function total(){
     let result = document.getElementById('status').value;    // 전체값 가져옴
-    document.getElementById('status').value = eval(result);  // eval 함수로 계산
-    
+    document.getElementById('status').value = eval(result);
 }
 function remove(){
     document.getElementById('status').value = "";

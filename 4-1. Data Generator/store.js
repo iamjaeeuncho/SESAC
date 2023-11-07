@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
 
 // UUID 생성
-let store_uuid = uuidv4();
+// let store_uuid = uuidv4();
 // console.log(store_uuid);
 
 

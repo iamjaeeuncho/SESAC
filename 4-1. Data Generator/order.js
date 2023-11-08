@@ -52,8 +52,8 @@ function fileReaderForId(csvFilePath) {
 let csvStoreFilePath = 'store.csv';
 let csvUserFilePath = 'user.csv';
 
-// fileReaderForId(csvStoreFilePath);
-// fileReaderForId(csvUserFilePath);
+// console.log(fileReaderForId(csvStoreFilePath));
+// console.log(fileReaderForId(csvUserFilePath));
 
 
 

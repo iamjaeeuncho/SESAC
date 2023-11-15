@@ -1,4 +1,8 @@
+// Node.js의 http 모듈 가져옴
 const http = require('http');
+
+// 클라이언트로부터의 요청(req)과 서버로의 응답(res)을 다루는 HTTP 서버를 생성
+// 요청과 응답은 콜백 함수로 처리
 
 const server = http.createServer((req, res) => {
     // 헤더

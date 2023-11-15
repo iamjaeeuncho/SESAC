@@ -6,11 +6,23 @@
     </head>
     <body>
         <nav>
-            <a href="./about">About</a>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/user">User</a>
         </nav>
         <section>
-            <h1>Hello 노드 서버</h1>
-            <p>Hello Server1</p>
+            <h1>Hello 노드 서버!</h1>
+            <p>Hello Server1!</p>
         </section>
+        <section>
+            <h1>Users!</h1>
+            <!-- <form id="form" action="/user" method="post"> -->
+            <form id="form">
+                <input text="text" name="name" id="username"></input>
+                <button type="submit">Submit</button>
+            </form>
+            <div id="userTable"></div>
+        </section>
+        <script src="static/user.js"></script>
     </body>
 </html>

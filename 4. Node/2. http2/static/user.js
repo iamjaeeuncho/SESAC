@@ -1,7 +1,9 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById("form");
     const username = document.getElementById("username");
 
+    // 페이지 최초 로딩시 백엔드에 사용자 데이터 요청
+    await updateTable();
     console.log(form, username);
 
     form.addEventListener("submit", async (ev) => {
@@ -26,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
             if (response.ok) {
                 alert("등록 성공");
+                // 등록 완료시 입력 컬럼 초기화
+                username.value = '';
 
                 // 등록 성공시 화면 컴포넌트 추가
                 await updateTable();
@@ -52,15 +56,59 @@ async function updateTable() {
 function displayUsers(users) {
     // users에는 json 포맷의 사용자 데이터를 다 가지고 있음
     const userTable = document.getElementById("userTable");
+    userTable.innerHTML = '';
+
     if (Object.keys(users).length === 0) {
         const messageRow = document.createElement('div');
         messageRow.textContent = "등록된 사용자가 없습니다";
-        userTable.appendChild(message);
+        userTable.appendChild(messageRow);
     } else {
         for (const key in users) {
             const row = document.createElement("div");
-            row.innerHTML = `ID: ${key}, Name: ${users[key]}`;
+            row.innerHTML = `<strong>ID:</strong> ${key},
+                            <strong>Name:</strong> ${users[key]}
+                            <button onclick="editUser('${key}')">수정</button>
+                            <button onclick="deleteUser('${key}')">삭제</button>`;
             userTable.appendChild(row);
         }
     }
+}
+
+async function editUser(userId) {
+    const newName = prompt('수정할 이름을 입력하세요')
+    const response = await fetch(`/user/${userId}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: newName}) // 새로운 이름
+    })
+
+    if (response.ok) {
+        alert('수정 성공')
+        // 수정 성공시 페이지 리로딩
+        await updateTable();
+    } else {
+        const errorMessage = await response.text();
+        alert(`수정 실패: ${errorMessage}`);
+    }
+}
+
+async function deleteUser(userId) {
+    // 사용자에게 삭제 유무 확인
+    const confirmDelete = confirm(`${userId}를 정말로 삭제하시겠습니까아?`)
+    // console.log(confirmDelete)
+    if (confirmDelete) {
+        // 삭제 요청 수행
+        const response = await fetch(`/user/${userId}`, {
+            method: 'DELETE',
+        });
+    
+        if (response.ok) {
+            // 화면 갱신
+           await updateTable();
+        } else {
+            const errorMessage = await response.text();
+            throw new Error(`삭제 실패: ${errorMessage}`);
+        }
+    }
+
 }

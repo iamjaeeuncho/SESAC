@@ -39,15 +39,15 @@ const server = http.createServer(async (req, res) => {
             } else if (req.url == "/user") {   
                 res.writeHead(SUCCESS, {"Content-Type": "text/plain; charset=utf-8"});
                 res.end(JSON.stringify(users));
-            } else if (req.url === "/images/Quokka.jpeg") {
-                const data = await fs.readFile("./images/Quokka.jpeg");
-                res.writeHead(SUCCESS, {"Content-Type": "image/jpg"});
-                res.end(data);
+            // } else if (req.url === "/static/sea.jpeg") {
+            //     const data = await fs.readFile("./static/sea.jpeg");
+            //     res.writeHead(SUCCESS, {"Content-Type": "image/jpg"});
+            //     res.end(data);
             } else {
-                const imageMatch = req.url.match(/^\/images\/(.+)$/);
+                const imageMatch = req.url.match(/^\/static\/(.+)$/);
                 if (imageMatch) {
                     const imageName = imageMatch[1];
-                    const imagePath = "./images/" + imageName;
+                    const imagePath = "./static/" + imageName;
                     try {   
                         // const filePath = req.url;
                         const contentType = getContentType(imagePath);
@@ -76,7 +76,8 @@ const server = http.createServer(async (req, res) => {
                     const username = formData.name;
                     console.log("사용자 이름은??", username);
 
-                    users[username] = username;
+                    const id = Date.now();
+                    users[id] = username;
                     console.log(users);
                 });
                 // 결과 response 주는 코드
@@ -98,8 +99,9 @@ const server = http.createServer(async (req, res) => {
                 req.on("end", () => {
                     console.log("PUT Body: ", body);
                     // const value = body.split("=")[1];
-                    const formData = parse(body);
+                    const formData = JSON.parse(body);
                     users[key] = formData.name;
+            
                     console.log(users);
                 })
             }

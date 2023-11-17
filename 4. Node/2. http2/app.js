@@ -93,15 +93,13 @@ const server = http.createServer(async (req, res) => {
             if (req.url.startsWith("/user/")) {
                 const key = req.url.split("/")[2];
                 let body = "";
-                req.on("data", (data) => {
-                    body += data;
-                });
+                req.on("data", (data) => { body += data });
                 req.on("end", () => {
                     console.log("PUT Body: ", body);
                     // const value = body.split("=")[1];
                     const formData = JSON.parse(body);
+                    console.log(key);
                     users[key] = formData.name;
-            
                     console.log(users);
                 })
             }

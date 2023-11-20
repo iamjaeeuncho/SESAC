@@ -44,6 +44,7 @@ app.get('/about2', (req, res) => {
         }
     })
 })
+
 app.listen(port, () => {
     console.log(`${port}열림`)
 })

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>로그인</title>
+        <style>
+            .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--background-color);
+            padding: 8px 12px;
+            }
+            
+            .navbar__menu {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding-left: 0;
+            background-color: aliceblue;
+            width: 100%;
+            }
+
+            .navbar__menu li {
+            padding: 8px 30px;
+            }
+
+            nav a {
+            text-decoration: none;
+            color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <ul class="navbar__menu">
+                    <li><a href="#" onclick="navigateTo('home')">Home</a></li>
+                    <li><a href="#" onclick="navigateTo('login')">Login</a></li>
+                    <li><a href="#" onclick="navigateTo('profile')">Profile</a></li>
+                    <li><a href="#" onclick="navigateTo('logout')">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div id="content" class="container">
+            <!-- 동적으로 바뀌는 내용 -->
+        </div>
+
+        <div class="container" id="loginContainer">
+            <h2>Login</h2>
+            <form action="/login" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <br/>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br/>
+                <button type="submit">로그인</button>
+            </form>
+        </div>
+
+        <script>
+            function navigateTo(page) {
+                console.log(page)
+                document.querySelectorAll('.container').forEach(container => {
+                    container.style.display = 'none';
+                });
+
+                document.getElementById(page + 'Container').style.display = 'block';
+            }
+        </script>
+    </body>
+</html>

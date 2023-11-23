@@ -10,21 +10,21 @@ function login() {
         body: JSON.stringify({ username, password }),
     })
     .then(response => response.json())
-    // .then(response => {
-    //     if (response.status === 200) {
-    //         return response.json();
-    //     } else {
-    //         throw new Error('로그인 실패')
-    //     }
-    // })
+    .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            throw new Error('로그인 실패')
+        }
+    })
     .then(data => {
         console.log(data.message);
         alert(data.message);
-        // if (data.message === '로그인 성공') {
-        //     alert('로그인 성공')
-        // } else {
-        //     alert('로그인 실패')
-        // }
+        if (data.message === '로그인 성공') {
+            alert('로그인 성공')
+        } else {
+            alert('로그인 실패')
+        }
         checkLoginStatus();
     }).catch(error => {
         console.log('로그인 실패: ', error);

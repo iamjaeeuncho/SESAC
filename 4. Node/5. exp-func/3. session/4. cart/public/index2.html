@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>마이쿠땅</title>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
+        <script src="/static/cart.js"></script>
+    </head>
+    <body>
+
+        <div id="product"></div>
+        <div id="cart"></div>
+
+        <script>
+            fetch('/product.html')
+            .then((response) => response.text())
+            .then((product) => 
+                document.getElementById('product').innerHTML = product);
+            
+            fetch('/cart.html')
+            .then((response) => response.text())
+            .then((cart) => 
+                document.getElementById('cart').innerHTML = cart);
+        </script>
+    </body>
+</html>

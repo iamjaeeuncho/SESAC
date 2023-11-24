@@ -32,9 +32,8 @@ app.get('/products', (req, res) => {
 })
 
 app.get('/cart', (req, res) => {
-    // console.log(req.session)
+    // console.log('Session Info: ', req.sessionStore.sessions);
     const cart = req.session.cart || [];
-    console.log('Session Info: ', req.sessionStore.sessions);
     res.json(cart)
 })
 
@@ -55,7 +54,6 @@ app.post('/add-to-cart/:productId', (req, res) => {
         price: product.price
     })
 
-    console.log(cart);
     req.session.cart = cart;
     res.json({ message: '상품이 장바구니에 추가되었습니다.', cart })
 })
@@ -71,7 +69,7 @@ app.post('/update-quantity/:productId', (req, res) => {
         return res.status(404).json({ message: '상품을 찾을 수 없습니다' })
     }
 
-    item.quantity = Math.max(1, item.quantity + validateHeaderValue);
+    item.quantity = Math.max(1, item.quantity + change);
 })
 
 app.post('remove-from-cart/:productId', (req, res) => {

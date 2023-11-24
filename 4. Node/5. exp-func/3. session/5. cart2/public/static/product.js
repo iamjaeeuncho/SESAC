@@ -16,7 +16,7 @@ function displayProduct(products) {
             <td>${product.id}</td>
             <td>${product.name}</td>
             <td>${product.price}</td>
-            
+            <td><button onclick='addToCart(${product.id})'>담기</button></td>
         `
         productTableBody.appendChild(row);
     })

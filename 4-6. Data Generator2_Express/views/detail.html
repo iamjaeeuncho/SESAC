@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 데이터 테이블 </title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f8f8f8;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th {
+                background-color: #3498db;
+                color: white;
+                padding: 10px;
+                text-align: left;
+                border-bottom: 2px solid #ddd;
+            }
+
+            td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            td a {
+                text-decoration: none;
+                color: #3498db;
+                font-weight: bold;
+            }
+
+            td a:hover {
+                color: #1e70bf;
+            }
+
+            .BackToList {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .BackToList a {
+                display: inline-block;
+                padding: 8px 16px;
+                text-decoration: none;
+                border: 1px solid #3498db;
+                color: #3498db;
+                margin: 0 4px;
+                transition: background-color 0.3s;
+            }
+
+            .BackToList a.active {
+                background-color: #3498db;
+                color: white;
+                border: 1px solid #3498db;
+            }
+
+            .BackToList a:hover:not(.active) {
+                background-color: #ddd;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>사용자 테이블</h1>
+        <table>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+                <tr>
+                    {% for header in headers %}
+                        <td>{{ row[header] }}</td>
+                    {% endfor %}
+                </tr>
+        </table>
+        <div class="BackToList">
+            <a href="javascript:history.back();">Back to List</a>        
+        </div>        
+    </body>
+</html>

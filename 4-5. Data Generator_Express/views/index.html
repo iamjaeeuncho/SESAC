@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 데이터 생성기 </title>
+        <style>
+            th {
+                text-align: center;
+                background-color: gray;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>사용자 테이블</h1>
+        <table>
+            <tr>
+                <th>Num</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Birthday</th>
+                <th>Age</th>
+                <th>Address</th>
+            </tr>
+            {% for data in datas %}
+            <tr>
+                <td> {{ data.Num }} </td>
+                <td> {{ data.Id }} </td>
+                <td> {{ data.Name }} </td>
+                <td> {{ data.Gender }} </td>
+                <td> {{ data.Birthday }} </td>
+                <td> {{ data.Age }} </td>
+                <td> {{ data.Address }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

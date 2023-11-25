@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> 데이터 테이블 </title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f8f8f8;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th {
+                background-color: #3498db;
+                color: white;
+                padding: 10px;
+                text-align: left;
+                border-bottom: 2px solid #ddd;
+            }
+
+            td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            td a {
+                text-decoration: none;
+                color: #3498db;
+                font-weight: bold;
+            }
+
+            td a:hover {
+                color: #1e70bf;
+            }
+
+            .pagination {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .pagination a {
+                display: inline-block;
+                padding: 8px 16px;
+                text-decoration: none;
+                border: 1px solid #3498db;
+                color: #3498db;
+                margin: 0 4px;
+                transition: background-color 0.3s;
+            }
+
+            .pagination a.active {
+                background-color: #3498db;
+                color: white;
+                border: 1px solid #3498db;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>사용자 테이블</h1>
+        <form action="/search" method="get">
+            <input type="text" id="searchName" name="name" required>
+            <button type="submit">검색</button>
+        </form>
+        <table>
+            <tr>
+                {% for header in headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+            {% for person in data %}
+                <tr>
+                    {% for header in headers %}
+                        <td>{{ person[header] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="/search?name={{ searchName }}&page={{ page - 1 }}">Previous</a>
+            {% endif %}
+        
+            {% for num in range(1, total_pages + 1) %}
+                <a href="/search?name={{ searchName }}&page={{ num }}">{{ num }}</a>
+            {% endfor %}
+        
+            {% if page < total_pages %}
+                <a href="/search?name={{ searchName }}&page={{ page + 1 }}">Next</a>
+            {% endif %}
+        </div>        
+    </body>
+</html>

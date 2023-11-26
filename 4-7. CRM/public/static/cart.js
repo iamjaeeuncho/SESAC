@@ -19,7 +19,7 @@ function displayCart(cart, totalAmount) {
                 <button onclick='increaseQuantity(${item.id})'>+</button>
                 <button onclick='decreaseQuantity(${item.id})'>-</button>
             </td>
-            <td><button>Remove</button></td>
+            <td><button onclick='removeItem(${item.id})'>Remove</button></td>
         `
         cartTableBody.appendChild(row);
     })
@@ -34,28 +34,45 @@ function displayCart(cart, totalAmount) {
         <td id="totalAmount">${totalAmount}</td>
     `;
     cartTableFoot.appendChild(row);
-
 };
 
 function increaseQuantity(itemId) {
-    console.log('increaseQuantity', itemId);
+    // console.log('increaseQuantity', itemId);
+    const change = 1;
 
-    fetch(`/update-quantity/${itemId}?change=1`, { method: 'POST' })
+    fetch(`/update-quantity/${itemId}?change=${change}`, { method: 'PUT' })
     .then((response) => response.json())
-    .then((item) => {
+    .then((data) => {
+        console.log(data)
         let quantityElement = document.getElementById(`quantity-${itemId}`);
-        quantityElement.innerHTML = item.quantity;
+        quantityElement.innerHTML = data.item.quantity;
+        
+        let totalquantity = document.getElementById(`totalAmount`);
+        totalquantity.innerHTML = data.total;
     })
+
 }
 
 function decreaseQuantity(itemId) {
-    console.log('decreaseQuantity', itemId);
+    // console.log('decreaseQuantity', itemId);
     const change = -1;
 
-    fetch(`/update-quantity/${itemId}?change=${change}`, { method: 'POST' })
+    fetch(`/update-quantity/${itemId}?change=${change}`, { method: 'PUT' })
     .then((response) => response.json())
-    .then((item) => {
+    .then((data) => {
         let quantityElement = document.getElementById(`quantity-${itemId}`);
-        quantityElement.innerHTML = item.quantity;
+        quantityElement.innerHTML = data.item.quantity;
+
+        let totalquantity = document.getElementById(`totalAmount`);
+        totalquantity.innerHTML = data.total;
     })
+}
+
+function removeItem(itemId) {
+    console.log(itemId)
+    fetch(`/remove-from-cart/${itemId}`, { method: 'POST' })
+    .then((response) => response.json())
+    .then((data) => 
+        displayCart(data.cart, data.total)
+    )
 }

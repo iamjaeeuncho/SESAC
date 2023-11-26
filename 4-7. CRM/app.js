@@ -59,7 +59,7 @@ app.post('/add-to-cart/:productId', (req, res) => {
     res.json({ message: '상품이 장바구니에 추가되었습니다.', cart })
 })
 
-app.post('/update-quantity/:productId', (req, res) => {
+app.put('/update-quantity/:productId', (req, res) => {
     const productId = parseInt(req.params.productId);
     const change = parseInt(req.query.change);
     const cart = req.session.cart;
@@ -71,15 +71,34 @@ app.post('/update-quantity/:productId', (req, res) => {
     }
 
     item.quantity = Math.max(0, item.quantity + change);
-    res.json( item )
+
+    const totalAmount = calculateTotalAmount(cart);
+
+    res.json({ item: item, total: totalAmount })
 })
 
-app.post('remove-from-cart/:productId', (req, res) => {
+app.post('/remove-from-cart/:productId', (req, res) => {
+    const productId = parseInt(req.params.productId);
+    const cart = req.session.cart;
 
+    const updatedCart = cart.filter(item => item.id !== productId);
+
+    req.session.cart = updatedCart;
+
+    const totalAmount = calculateTotalAmount(updatedCart);
+    res.json({ cart: updatedCart, total: totalAmount });
 })
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'product.html'))
+})
+
+app.get('/products.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'product.html'))
+})
+
+app.get('/cart.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cart.html'))
 })
 
 app.listen(port, () => {

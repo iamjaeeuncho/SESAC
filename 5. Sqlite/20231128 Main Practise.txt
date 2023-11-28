@@ -1,0 +1,206 @@
+SQLITE3 chinook.db
+
+.tables
+.schema
+.headers on
+.mode columns
+
+SELECT * FROM albums JOIN artists ON albums.artistID = artists.artistID limit 10;
+SELECT albums.AlbumId, albums.Title, artists.Name from albums JOIN artists ON albums.artistId = artists.artistId LIMIT 10;
+
+<미션>
+1. 미국에 거주하지 않는 고객(전체 이름, 고객 ID 및 국가)을 표시하는 쿼리를 제공합니다.
+SELECT DISTINCT Country FROM customers;
+SELECT FirstName || ' ' || LastName AS FullName, CustomerId, Country FROM customers WHERE country = 'USA';
+
+1-2. 미국에 살지 않는 고객 이름 풀네임, 고객 ID, 국가 출력
+SELECT FirstName || ' ' || LastName AS FullName, CustomerId, Country FROM customers WHERE country != 'USA';
+
+2. 브라질 고객만 표시하는 쿼리를 제공합니다.
+SELECT FirstName || ' ' || LastName AS FullName FROM customers WHERE country = 'Brazil';
+
+2-1. 브라질 고객의 송장을 보여주는 쿼리를 제공합니다. 결과 테이블에는 고객의 전체 이름, 송장 ID, 송장 날짜 및 청구 국가가 표시되어야 합니다.
+SELECT c.FirstName || ' ' || c\.LastName AS FullName, i.invoiceId, i.invoiceDate, i.BillingCity 
+FROM customers c JOIN invoices i ON c.CustomerId = i.CustomerId
+WHERE c.country = 'Brazil';
+
+3. 고객 중에 가장 많이 지출한 국가
+SELECT c.Country, COUNT(c.CustomerId) AS CustomerNum, COUNT(i.InvoiceId) AS InvoiceNum, SUM(i.Total) AS Total
+FROM invoices i
+INNER JOIN customers c ON i.CustomerId = c.CustomerId
+GROUP BY c.Country
+ORDER BY Total DESC
+LIMIT 1;
+
+4. 판매 대리인인 직원만 표시하는 쿼리를 제공하십시오.
+SELECT * FROM employees WHERE Title LIKE '%SALES%AGENT';
+
+5. 송장 테이블에서 청구 국가의 고유/고유 목록을 표시하는 쿼리를 제공합니다.
+SELECT DISTINCT BillingCountry FROM invoices;
+
+6. 각 판매 에이전트와 연결된 송장을 표시하는 쿼리를 제공합니다.
+결과 테이블에는 영업 에이전트의 전체 이름이 포함되어야 합니다.
+SELECT e.FirstName || ' ' || e.LastName AS FullName, i.InvoiceId
+FROM (
+    SELECT i.InvoiceId, c.CustomerId, c.SupportRepId
+    FROM invoices i 
+    JOIN customers c ON i.CustomerId = c.CustomerId) i
+JOIN employees e ON i.SupportRepId = e.EmployeeId;
+
+7. 모든 송장 및 고객에 대한 송장 합계, 고객 이름, 국가 및 판매 대리점 이름을 표시하는 쿼리를 제공합니다.
+SELECT ic.CustomerId, ic.CustomerName, ic.Country, ic.InvoiceId, ic.Total, e.FirstName || ' ' || e.LastName AS SaleAgentName
+FROM (
+    SELECT i.CustomerId, i.InvoiceId, i.Total, c.FirstName || ' ' || c.LastName AS CustomerName, c.Country, c.SupportRepId
+    FROM invoices i
+    JOIN customers c ON i.CustomerId = c.CustomerId) ic
+JOIN employees e ON ic.SupportRepId = e.EmployeeId
+
+8. 2009년과 2011년에 몇 개의 인보이스가 있었습니까?
+SELECT strftime('%Y', i.InvoiceDate) AS Year, COUNT(i.InvoiceId) AS InvoiceCount
+FROM invoices i
+WHERE strftime('%Y', i.InvoiceDate) IN ('2009', '2010')
+GROUP BY strftime('%Y', i.InvoiceDate);
+
+9. 각 연도의 총 매출은 얼마입니까?
+SELECT strftime('%Y', i.InvoiceDate) AS Year, SUM(i.Total) AS TotalAmount
+FROM invoices i
+GROUP BY strftime('%Y', i.InvoiceDate);
+
+10. InvoiceLine 테이블을 보고 Invoice ID 37에 대한 라인 항목 수를 계산하는 쿼리를 제공합니다.
+SELECT i.InvoiceId, COUNT(it.InvoiceLineId)
+FROM invoices i
+JOIN invoice_items it ON i.InvoiceId = it.InvoiceId
+WHERE i.InvoiceId = 37;
+
+11. InvoiceLine 테이블을 보고 각 Invoice에 대한 라인 항목 수를 계산하는 쿼리를 제공합니다. 힌트: 그룹화 기준
+SELECT i.InvoiceId, COUNT(it.InvoiceLineId)
+FROM invoices i
+JOIN invoice_items it ON i.InvoiceId = it.InvoiceId
+GROUP BY i.InvoiceId;
+
+12. 각 송장 라인 항목에 구매한 트랙 이름을 포함하는 쿼리를 제공합니다.
+SELECT i.InvoiceId, i.InvoiceLineId, i.TrackId, t.Name
+FROM invoice_items i 
+JOIN tracks t ON i.TrackId = t.TrackId;
+
+13. 구매한 트랙 이름과 아티스트 이름을 포함하는 쿼리를 각 송장 라인 항목과 함께 제공합니다.
+SELECT it.InvoiceId, it.InvoiceLineId, it.Name AS TrackName, art.Name AS ArtistName
+FROM (
+    SELECT i.InvoiceId, i.InvoiceLineId, i.TrackId, t.Name, t.AlbumId
+    FROM invoice_items i 
+    JOIN tracks t ON i.TrackId = t.TrackId) it
+JOIN albums alb ON it.AlbumId = alb.AlbumId
+JOIN artists art ON alb.ArtistId = art.ArtistId;
+
+14. 국가별 송장 수를 표시하는 쿼리를 제공합니다. 힌트: 그룹화 기준
+SELECT i.BillingCountry, COUNT(InvoiceId) AS InvoiceNum
+FROM invoices i
+GROUP BY i.BillingCountry
+
+15. 각 재생 목록의 총 트랙 수를 표시하는 쿼리를 제공합니다. 재생 목록 이름은 결과 테이블에 포함되어야 합니다.
+SELECT t.PlaylistId, t.TrackNum, p.Name AS PlaylistName
+FROM (
+    SELECT t.PlaylistId, COUNT(t.TrackId) AS TrackNum
+    FROM playlist_track t
+    GROUP BY t.PlaylistId) t
+JOIN playlists p ON t.PlaylistId = p.PlaylistId;
+
+16. 모든 트랙을 표시하지만 ID는 표시하지 않는 쿼리를 제공합니다.
+결과에는 앨범 이름, 미디어 유형 및 장르가 포함되어야 합니다.
+SELECT t.Name AS TrackName, a.Title AS AlbumTitle, m.Name AS MediaTypeName, g.Name AS GenreName
+FROM tracks t 
+JOIN albums a ON t.AlbumId = a.AlbumId
+JOIN media_types m ON t.MediaTypeId = m.MediaTypeId
+JOIN genres g ON t.GenreId = g.GenreId;
+
+17. 모든 송장을 표시하지만 송장 라인 항목의 수를 포함하는 쿼리를 제공합니다.
+SELECT i.InvoiceId, COUNT(it.InvoiceLineId) AS InvoiceLineNum
+FROM invoices i 
+JOIN invoice_items it ON i.InvoiceId = it.InvoiceId
+GROUP BY i.InvoiceId;
+
+18. 판매 대리점별 총 매출을 조회하는 쿼리를 제공한다.
+SELECT c.SupportRepId, e.FirstName || ' ' || e.LastName AS EmployeeName, e.Title, SUM(c.Total)
+FROM (
+    SELECT c.CustomerId, c.SupportRepId, i.Total
+    FROM invoices i
+    JOIN customers c ON i.CustomerId = c.CustomerId
+    GROUP BY c.CustomerId) c
+JOIN employees e ON c.SupportRepId = e.EmployeeId
+WHERE e.Title LIKE '%SALES%AGENT'
+GROUP BY c.SupportRepId;
+
+19. 2009년 가장 많은 매출을 올린 판매원은? 
+힌트: 하위 쿼리에서 MAX 함수를 사용하십시오.
+SELECT i.YEAR, SUM(i.Total) AS Total, e.FirstName || ' ' || e.LastName AS EmployeeName, e.Title
+FROM (
+    SELECT i.CustomerId, i.InvoiceId, strftime('%Y', i.InvoiceDate) AS YEAR, SUM(i.Total) AS Total
+    FROM invoices i
+    WHERE strftime('%Y', i.InvoiceDate) = '2009'
+    GROUP BY i.InvoiceId) i
+JOIN customers c ON i.CustomerId = c.CustomerId
+JOIN employees e ON c.SupportRepId = e.EmployeeId
+GROUP BY e.EmployeeId
+ORDER BY SUM(i.Total) DESC;
+
+20. 전체 판매 실적이 가장 많은 판매 대리점은?
+SELECT e.FirstName || ' ' || e.LastName AS EmployeeName, e.Title, ROUND(SUM(i.Total)) AS Total
+FROM invoices i
+JOIN customers c ON i.CustomerId = c.CustomerId
+JOIN employees e ON c.SupportRepId = e.EmployeeId
+GROUP BY e.EmployeeId
+ORDER BY i.Total DESC
+LIMIT 1;
+
+21. 각 판매 대리점에 할당된 고객 수를 보여주는 쿼리를 제공한다.
+SELECT e.FirstName || ' ' || e.LastName AS EmployeeName, e.Title, COUNT(c.CustomerId) AS CustomerNum 
+FROM customers c 
+JOIN employees e ON c.SupportRepId = e.EmployeeId
+GROUP BY e.EmployeeId;
+
+22. 국가별 총 매출을 보여주는 쿼리를 제공한다.
+SELECT c.Country, SUM(i.Total) AS Total
+FROM invoices i
+JOIN customers c ON i.CustomerId = c.CustomerId
+GROUP BY c.Country
+ORDER BY SUM(i.Total) DESC;
+
+23. 고객이 가장 많이 지출한 국가는 어디입니까?
+SELECT c.Country, SUM(i.Total)
+FROM invoices i 
+JOIN customers c ON i.CustomerId = c.CustomerId
+GROUP BY c.Country
+ORDER BY SUM(i.Total) DESC;
+
+24. 2013년 가장 많이 구매한 트랙을 보여주는 쿼리를 제공합니다.
+SELECT i.InvoiceId, t.Name, COUNT(t.TrackId) AS TrackNum
+FROM invoices i
+JOIN invoice_items it ON i.InvoiceId = it.InvoiceId
+JOIN tracks t ON it.TrackId = t.TrackId
+WHERE strftime('%Y', i.InvoiceDate) = '2013'
+GROUP BY i.InvoiceId;
+
+25. 가장 많이 구매한 상위 5곡을 보여주는 쿼리를 제공합니다.
+SELECT it.TrackId, COUNT(it.InvoiceLineId)
+FROM invoice_items it
+JOIN tracks t ON it.TrackId = t.TrackId
+GROUP BY it.TrackId
+ORDER BY COUNT(it.InvoiceId) DESC;
+
+26. 가장 많이 팔린 3명의 아티스트를 보여주는 쿼리를 제공합니다.
+SELECT art.ArtistId, art.Name, COUNT(it.InvoiceLineId)
+FROM invoice_items it 
+JOIN tracks t ON it.TrackId = t.TrackId
+JOIN albums alb ON t.AlbumId = alb.AlbumId
+JOIN artists art ON alb.ArtistId = art.ArtistId
+GROUP BY art.ArtistId
+ORDER BY COUNT(it.InvoiceLineId) DESC
+LIMIT 3;
+
+27. 가장 많이 구매한 Media Type을 보여주는 쿼리를 제공한다.
+SELECT m.Name, COUNT(InvoiceLineId)
+FROM invoice_items it 
+JOIN tracks t ON it.TrackId = t.TrackId
+JOIN media_types m ON t.MediaTypeId = m.MediaTypeId
+GROUP BY m.Name
+ORDER BY COUNT(InvoiceLineId) DESC;

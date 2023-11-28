@@ -1,5 +1,5 @@
 node_modules/
-.db
-.sqlite
-.sqlite3
-.exe
+*.db
+*.sqlite
+*.sqlite3
+*.exe

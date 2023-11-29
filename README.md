@@ -1,3 +1,2 @@
-# SESAC
-SESAC(Seoul Software Academy)<br>
+# SESAC(Seoul Software Academy)
 JavaScript Full Stack Course

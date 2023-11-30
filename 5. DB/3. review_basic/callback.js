@@ -11,13 +11,19 @@ console.log(myFunction(greet, 'jen'));
 
 // -------------
 
-const aaa = new Promise(resolve, reject) {
-    if (연산) {
-        resilve();
-    } else if {
-        reject()
-    }
-}
+// const aaa = new Promise(resolve, reject) {
+//     if (연산) {
+//         resilve();
+//     } else if {
+//         reject()
+//     }
+// }
+
+// aaa().then(() => {
+//     // 프로미스가 성공했을 때
+// }).catch(() => {
+//     // 프로미스가 실패했을 때
+// })
 
 // Promise
 // class Promise {

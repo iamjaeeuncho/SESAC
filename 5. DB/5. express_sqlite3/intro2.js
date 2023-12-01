@@ -1,6 +1,8 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
 const fs = require('fs');
+const { resolve } = require('path');
+const { rejects } = require('assert');
 
 const app = express();
 const port = 3000;
@@ -11,20 +13,29 @@ const db = new sqlite3.Database(dbFile);
 
 // DB 초기화 함수
 function init_database() {
-    // init_database.sql 파일 읽어와 실행
-    const sql = fs.readFileSync('init_database.sql', 'utf8');
-    console.log(sql);
-
-    db.exec(sql, (err) => {
-        if (err) {
-                console.error('초기화 실패: ', err);
-        } else {
-            console.log('초기화 성공');
-        }
+    return new Promise((resolve, reject) => {
+        // init_database.sql 파일 읽어와 실행
+        const sql = fs.readFileSync('init_database.sql', 'utf8');
+        console.log(sql);
+    
+        db.exec(sql, (err) => {
+            if (err) {
+                if (err.code === 'SQLITE_CONSTRAINT') {
+                    console.warn('DB가 이미 초기화되어 있음')
+                    resolve();
+                } else {
+                    console.error('초기화 실패: ', err);
+                    reject();
+                }
+            } else {
+                console.log('초기화 성공');
+                resolve();
+            }
+        })
     })
 }
 
-init_database();
+// init_database();
 
 
 // 서버 URL
@@ -59,6 +70,16 @@ app.get('/:table/:id', (req, res) => {
 })
 
 // Express 서버 시작
-app.listen(port, () => {
-    console.log(`서버 레디 ${port}`)
-})
+async function startServer() {
+    try {
+        await init_database();
+    
+        app.listen(port, () => {
+            console.log(`서버 레디 ${port}`)
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+startServer();

@@ -93,13 +93,24 @@ app.get('/products', (req, res) => {
     let condition = 0;
 
     if (name) {
-	    if (condition = 0) { query += ' WHERE' } else { query += ' AND'; }
+	    if (condition = 0) {
+            query += ' WHERE'
+        } else {
+            query += ' AND '
+        }
     
     query += ` name LIKE '${ name }'`; condition = 1; }
     
     if (price) {
-        if (condition = 0) { query += ' WHERE' } else { query += ' AND'; }
-    query += `price = ${price}`; condition = 1; }
+        if (condition = 0) {
+            query += ' WHERE'
+        } else {
+            query += ' AND '
+        }
+
+    query += `price = ${price};`; condition = 1; }
+
+    console.log(query);
 
     db.all(query, (err, rows) => {
         res.json(rows);

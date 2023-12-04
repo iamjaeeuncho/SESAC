@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CMS</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="users.js"></script>
+</head>
+<body>
+  <div id="main">
+    <nav>
+      <ul>
+        <li><a href="/users">User</a></li>
+        <li><a href="/orders">Order</a></li>
+        <li><a href="/orderitems">Order Item</a></li>
+        <li><a href="/items">Item</a></li>
+        <li><a href="/stores">Store</a></li>
+      </ul>
+    </nav>
+    
+    <table border="1" id="userTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Birthdate</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+    
+    <div id="pagination"></div>
+  </div>
+</body>
+</html>

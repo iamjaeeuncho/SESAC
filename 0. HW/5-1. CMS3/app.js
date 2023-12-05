@@ -13,10 +13,14 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 // 라우트
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  res.sendFile(path.join(__dirname, 'views', 'users.html'));
 });
 
-app.get('/users', (req, res) => {
+app.get('/user/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'users.html'));
+});
+
+app.get('/users/:pagenum', (req, res) => {
   // 데이터베이스에서 users 테이블 조회
   db.all('SELECT * FROM users', (err, rows) => {
     if (err) {
@@ -24,19 +28,18 @@ app.get('/users', (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-  // 원하는 페이지로 이동
-  const itemsPerPage = 20;
-  let page = req.query.page || 1;
-  let startIndex = (page - 1) * itemsPerPage;
-  let endIndex = startIndex + itemsPerPage;
+    // 원하는 페이지로 이동
+    const itemsPerPage = 10;
+    let page = req.params.pagenum || 1;
+    let startIndex = (page - 1) * itemsPerPage;
+    let endIndex = startIndex + itemsPerPage;
 
-  // 전체 페이지수 계산
-  const totalPages = Math.ceil(rows.length / itemsPerPage);
-  
-  // 읽은 데이터 앞에 itemsPerPage개만 주기
-  const currPageRows = rows.slice(startIndex, endIndex);
-  
-  // res.json(rows);
+    // 전체 페이지수 계산
+    const totalPages = Math.ceil(rows.length / itemsPerPage);
+    
+    // 읽은 데이터 앞에 itemsPerPage개만 주기
+    const currPageRows = rows.slice(startIndex, endIndex);
+    
     res.json({
       currPageRows: currPageRows,
       totalPages: totalPages,
@@ -44,19 +47,6 @@ app.get('/users', (req, res) => {
     })
   });
 });
-
-app.get('/users/:id', (req, res) => {
-  const id = req.params.id;
-    // console.log(data)
-    // res.send(`도착한 ID: ${id}`);
-
-    res.render('detail', {
-      headers: fieldnames,
-      row: data.find(person => person.Id === id),
-    })
-});
-
-
 
 // 서버 생성
 app.listen(port, () => {

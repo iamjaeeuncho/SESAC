@@ -52,11 +52,16 @@ app.get('/users/:pagenum', (req, res) => {
   });
 });
 
-app.get('/search', (req, res) => {
+app.get('/search/:page?', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'users.html'));
+});
+
+app.get('/searchform/:pagenum?', (req, res) => { 
   const { name, gender } = req.query;
+  console.log(req.url)
 
   let query = 'SELECT * FROM users';
-  const params = [];
+  const param = [];
 
   if (name || gender) {
     query += ' WHERE';
@@ -64,7 +69,7 @@ app.get('/search', (req, res) => {
 
   if (name) {
     query += ' Name LIKE ?';
-    params.push(`%${name}%`);
+    param.push(`%${name}%`);
   }
 
   if (name && gender) {
@@ -73,18 +78,32 @@ app.get('/search', (req, res) => {
 
   if (gender) {
     query += ' Gender = ?';
-    params.push(`${gender}`);
+    param.push(`${gender}`);
   }
 
-  db.all(query, params, (err, rows) => {
+  db.all(query, param, (err, rows) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
     
+    // 원하는 페이지로 이동
+    const itemsPerPage = 10;
+    let page = req.params.pagenum || 1;
+    let startIndex = (page - 1) * itemsPerPage;
+    let endIndex = startIndex + itemsPerPage;
+
+    // 전체 페이지수 계산
+    const totalPages = Math.ceil(rows.length / itemsPerPage);
+    
+    // 읽은 데이터 앞에 itemsPerPage개만 주기
+    const currPageRows = rows.slice(startIndex, endIndex);
+    console.log(currPageRows, totalPages, page)
     res.json({
-      searchResults: rows
-    });
+      currPageRows: currPageRows,
+      totalPages: totalPages,
+      page: parseInt(page)
+    })
   });
 });
 

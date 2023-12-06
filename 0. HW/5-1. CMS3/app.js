@@ -8,21 +8,25 @@ const port = 3000;
 // SQLite3 데이터베이스 연결
 const db = new sqlite3.Database('mycrm1.db');
 
+
 // Views 폴더 지정
 app.use(express.static(path.join(__dirname, 'views')));
+
 
 // 라우트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'users.html'));
 });
 
-app.get('/user/:id', (req, res) => {
+app.get('/user/:id?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'users.html'));
 });
 
 app.get('/users/:pagenum', (req, res) => {
   // 데이터베이스에서 users 테이블 조회
-  db.all('SELECT * FROM users', (err, rows) => {
+  const query = 'SELECT * FROM users';
+
+  db.all(query, (err, rows) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal Server Error' });
@@ -45,6 +49,42 @@ app.get('/users/:pagenum', (req, res) => {
       totalPages: totalPages,
       page: parseInt(page)
     })
+  });
+});
+
+app.get('/search', (req, res) => {
+  const { name, gender } = req.query;
+
+  let query = 'SELECT * FROM users';
+  const params = [];
+
+  if (name || gender) {
+    query += ' WHERE';
+  }
+
+  if (name) {
+    query += ' Name LIKE ?';
+    params.push(`%${name}%`);
+  }
+
+  if (name && gender) {
+    query += ' AND';
+  }
+
+  if (gender) {
+    query += ' Gender = ?';
+    params.push(`${gender}`);
+  }
+
+  db.all(query, params, (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+    res.json({
+      searchResults: rows
+    });
   });
 });
 

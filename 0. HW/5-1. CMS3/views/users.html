@@ -19,12 +19,13 @@
     </nav>
     
     <div id="searchbar">
-      <form id="searchForm">
+      <form id="searchForm" action="/search" method="get" >
         <label for="name">Name:</label>
         <input type="text" id="name" name="name">
   
         <label for="gender">Gender:</label>
         <select id="gender" name="gender">
+            <option value=""></option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
         </select>
@@ -32,10 +33,11 @@
         <button type="button" onclick="submitSearch()">Search</button>
       </form>
     </div>
-    
+
     <div id="searchResults">
         <!-- Search Results -->
     </div>
+    
 
     <table border="1" id="userTable">
       <thead>

@@ -1,5 +1,5 @@
-function fetchUserData(userId) {
-    fetch(`/users/${userId}`)
+function fetchUserData(page) {
+    fetch(`/users/${page}`)
     .then(handleResponse)
     .then(data => {
         // 가져온 데이터를 테이블에 동적으로 추가
@@ -51,16 +51,9 @@ function fetchUserData(userId) {
 }
 
 
-// 페이지 로드 시 데이터 가져오기
-document.addEventListener('DOMContentLoaded', () => {
-    // 서버에서 데이터를 가져오는 함수
-    const page = window.location.pathname.split('/')[2] || 1;
-
-    fetchUserData(page);
-});
-
 
 function submitSearch() {
+    
     const page = window.location.pathname.split('/')[2] || 1;
     const name = document.getElementById("name").value;
     const gender = document.getElementById("gender").value;
@@ -68,12 +61,12 @@ function submitSearch() {
     fetchSearch(page, name, gender);
 }
 
-function fetchSearch(pagenum, name, gender) {
-    fetch(`/searchform/${pagenum}/?name=${name}&gender=${gender}`)
+function fetchSearch(page, name, gender) {
+    console.log('Fetching search:', page, name, gender);
+    fetch(`/searchform/${page}/?name=${name}&gender=${gender}`)
     .then(handleResponse)
     .then(data => {
-        console.log(data)
-
+        console.log("Received data:", data);
         // 가져온 데이터를 테이블에 동적으로 추가
         const tableBody = document.getElementById('userTableBody');
         tableBody.innerHTML = '';
@@ -102,22 +95,22 @@ function fetchSearch(pagenum, name, gender) {
         // Add Previous link
         if (data.page > 1) {
             const prevSpan = document.createElement('span');
-            prevSpan.innerHTML = `<a href="/search/${pagenum - 1}/?name=${name}&gender=${gender}" onclick="fetchSearch(${pagenum-1}, ${name}, ${gender})">Previous</a>`;
+            prevSpan.innerHTML = `<a id="searchLink" onclick="fetchSearch('${data.page - 1}', '${name}', '${gender}')">Previous</a>`;
             paginationDiv.appendChild(prevSpan);
         }
 
         // Add numeric page links
         for (let num = startPage; num <= endPage; num++) {
             const pageSpan = document.createElement('span');
-            // pageSpan.innerHTML = `<div onclick="fetchSearch(${num}, '${name}', '${gender}')">${num}</div>`;
-            pageSpan.innerHTML = `<a href="/search/${num}/?name=${name}&gender=${gender}" onclick="fetchSearch(${num}, ${name}, ${gender})">${num}</a>`;
+            // pageSpan.innerHTML = `<a id="searchLink" href="/search/${num}/?name=${name}&gender=${gender}" onclick="fetchSearch('${num}', '${name}', '${gender}')">${num}</a>`;
+            pageSpan.innerHTML = `<a id="searchLink" onclick="fetchSearch('${num}', '${name}', '${gender}')">${num}</a>`;
             paginationDiv.appendChild(pageSpan);
         }
 
         // Add Next link
         if (data.page < data.totalPages) {
             const nextSpan = document.createElement('span');
-            nextSpan.innerHTML = `<a href="/search/${pagenum + 1}/?name=${name}&gender=${gender}" onclick="fetchSearch(${pagenum+1}, ${name}, ${gender})">Next</a>`;
+            nextSpan.innerHTML = `<a id="searchLink" onclick="fetchSearch('${data.page + 1}', '${name}', '${gender}')">Next</a>`;
             paginationDiv.appendChild(nextSpan);
         }
     })
@@ -140,6 +133,8 @@ function handleError(error) {
 // 페이지 로드 시 데이터 가져오기
 document.addEventListener('DOMContentLoaded', () => {
     // 서버에서 데이터를 가져오는 함수
-    const page = window.location.pathname.split('/')[2] || 1;
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
     fetchUserData(page);
 });

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>CMS</title>
   <link rel="stylesheet" href="/style.css">
-  <script src="/users.js"></script>
+  <script src="/orders.js"></script>
 </head>
 <body>
   <div id="main">
@@ -17,32 +17,14 @@
         <li><a href="/store">Store</a></li>
       </ul>
     </nav>
-    
-    <div id="searchbar">
-      <form id="searchForm" action="/search" method="get" >
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
-  
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-            <option value=""></option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-  
-        <button id="searchButton" type="button" onclick="submitSearch()">Search</button>
-      </form>
-    </div>    
 
     <table border="1" id="userTable">
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>Gender</th>
-          <th>Age</th>
-          <th>Birthdate</th>
-          <th>Address</th>
+          <th>Order At</th>
+          <th>Store Id</th>
+          <th>User Id</th>
         </tr>
       </thead>
       <tbody id="userTableBody">

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CMS</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/storedetails.js"></script>
+</head>
+<body>
+  <div id="main">
+    <nav>
+      <ul>
+        <li><a href="/user">User</a></li>
+        <li><a href="/order">Order</a></li>
+        <li><a href="/orderitem">Order Item</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/store">Store</a></li>
+      </ul>
+    </nav>
+    <a id="backButton" href="javascript:history.back();">Back</a>
+
+    <h3>매장 정보</h3>
+    <table border="1" id="StoreTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody id="StoreTableBody">
+        <!-- Table Rows -->
+      </tbody>
+    </table>
+    
+    <h3>월간 매출액</h3>
+    <table border="1" id="StoreTableSales">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Revenue</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody id="StoreTableBodySales">
+        <!-- Table Rows -->
+      </tbody>
+    </table>
+
+  </div>
+</body>
+</html>

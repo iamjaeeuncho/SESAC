@@ -30,6 +30,12 @@ nav ul li a:hover {
     background-color: #555;
 }
 
+.backButton {
+    display: block;
+    text-align: right;
+    margin: 100px;
+}
+
 #searchbar {
     padding: 15px 20px;
 }

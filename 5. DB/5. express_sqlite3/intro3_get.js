@@ -89,7 +89,7 @@ app.get('/products', (req, res) => {
     query += 'SELECT * FROM products';
     
     // if(name && price) {
-    // query +=` WHERE name LIKE '${name} AND price = ${price}'`;}
+    // query +=` WHERE name LIKE '%${name}%' AND price = ${price}`;}
     let condition = 0;
 
     if (name) {
@@ -99,7 +99,7 @@ app.get('/products', (req, res) => {
             query += ' AND '
         }
     
-    query += ` name LIKE '${ name }'`; condition = 1; }
+    query += ` name LIKE '%${ name }%'`; condition = 1; }
     
     if (price) {
         if (condition = 0) {

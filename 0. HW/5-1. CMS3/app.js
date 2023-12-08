@@ -26,7 +26,6 @@ app.get('/user/:page?', (req, res) => {
 });
 
 app.get('/user_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const query = 'SELECT * FROM users';
 
   db.all(query, (err, rows) => {
@@ -122,6 +121,7 @@ app.get('/userdetail_api/:userid?', (req, res) => {
   const query = `SELECT u.id AS UserId
                   , u.name AS UserName
                   , u.gender AS UserGender
+                  , u.age AS UserAge
                   , u.birthdate AS UserBirthdate
                   , u.address AS UserAddress
                   , o.id AS OrderId
@@ -141,6 +141,53 @@ app.get('/userdetail_api/:userid?', (req, res) => {
   });
 });
 
+app.get('/userstoretop5_api/:userid?', (req, res) => {
+  const userid = req.params.userid;
+  const query = `SELECT o.userid AS UserId
+                      , s.name AS StoreName
+                      , COUNT(DISTINCT oi.orderid) AS OrderNum
+                FROM orders o
+                JOIN stores s ON o.storeid = s.id
+                JOIN orderitems oi ON o.id = oi.orderid
+                WHERE o.userid = '${userid}'
+                GROUP BY o.userid, s.id
+                ORDER BY COUNT(DISTINCT oi.orderid) DESC LIMIT 5
+                `;
+
+  db.all(query, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+  res.json( data )
+  });
+});
+
+app.get('/useritemtop5_api/:userid?', (req, res) => {
+  const userid = req.params.userid;
+  const query = `SELECT o.userid AS UserId
+                  , i.id AS ItemId
+                  , i.name AS ItemName
+                  , COUNT(oi.orderid) AS OrderNum
+                FROM orders o
+                JOIN orderitems oi ON o.id = oi.orderid
+                JOIN items i ON oi.itemid = i.id
+                WHERE o.userid = '${userid}'
+                GROUP BY o.userid, i.id
+                ORDER BY COUNT(oi.orderid) DESC LIMIT 5
+                `;
+
+  db.all(query, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+  res.json( data )
+  });
+});
+
 
 // STORE
 
@@ -149,7 +196,6 @@ app.get('/store/:page?', (req, res) => {
 });
 
 app.get('/store_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const query = 'SELECT * FROM stores';
 
   db.all(query, (err, rows) => {
@@ -184,7 +230,6 @@ app.get('/storedetail/:page?', (req, res) => {
 });
 
 app.get('/storedetail_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const storeId = req.params.page;
   
   const query = `SELECT s.id AS StoreId
@@ -216,7 +261,6 @@ app.get('/storedaily/:storeId/:orderAt?', (req, res) => {
 });
 
 app.get('/storedaily_api/:storeId/:orderAt?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const storeId = req.params.storeId;
   const orderAt = req.params.orderAt;
   
@@ -244,7 +288,6 @@ app.get('/storedaily_api/:storeId/:orderAt?', (req, res) => {
 });
 
 app.get('/storeregular_api/:storeId/:orderAt?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const storeId = req.params.storeId;
   const orderAt = req.params.orderAt;
   
@@ -281,7 +324,6 @@ app.get('/item/:page?', (req, res) => {
 });
 
 app.get('/item_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const query = 'SELECT * FROM items';
 
   db.all(query, (err, rows) => {
@@ -310,6 +352,37 @@ app.get('/item_api/:page?', (req, res) => {
   });
 });
 
+app.get('/itemdetail/:page?', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'itemdetail.html'));
+});
+
+app.get('/itemdetail_api/:itemid?', (req, res) => {
+  const itemid = req.params.itemid;
+
+  const query = `SELECT oi.itemid AS ItemId
+                  , i.name AS ItemName
+                  , strftime('%Y-%m', o.orderat) AS OrderAt
+                  , COUNT(oi.orderId) AS OrderNum
+                  , CAST(i.unitprice AS INTEGER) AS UnitPrice
+                  , SUM(i.unitprice) AS TotalPrice
+                FROM orders o
+                JOIN orderitems oi ON o.id = oi.orderid
+                JOIN items i ON oi.itemid = i.id
+                WHERE oi.itemid = '${itemid}'
+                GROUP BY strftime('%Y-%m', o.orderat);
+                `;
+
+  db.all(query, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+  res.json( data )
+  });
+});
+
+
 
 // ORDERITEM
 
@@ -318,7 +391,6 @@ app.get('/orderitem/:page?', (req, res) => {
 });
 
 app.get('/orderitem_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const query = 'SELECT * FROM orderitems';
 
   db.all(query, (err, rows) => {
@@ -355,7 +427,6 @@ app.get('/order/:page?', (req, res) => {
 });
 
 app.get('/order_api/:page?', (req, res) => {
-  // 데이터베이스에서 users 테이블 조회
   const query = 'SELECT * FROM orders';
 
   db.all(query, (err, rows) => {

@@ -10,7 +10,7 @@ function fetchItemData(page) {
         data.currPageRows.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><a href="#">${item.Id}</a></td>
+                <td><a href='/itemdetail/${item.Id}'>${item.Id}</a></td>
                 <td>${item.Type}</td>
                 <td>${item.Name}</td>
                 <td>${item.UnitPrice}</td>

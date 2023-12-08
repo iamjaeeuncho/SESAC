@@ -1,8 +1,7 @@
-function fetchStoreDetailData(Id) {
+function fetchUserDetailData(Id) {
     fetch(`/userdetail_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        console.log(data)
         // 고객 정보
         const tableBody = document.getElementById('UserDetailTableBody');
         tableBody.innerHTML = '';
@@ -34,6 +33,48 @@ function fetchStoreDetailData(Id) {
     .catch(handleError);
 }
 
+function fetchUserStoreTop5(Id) {
+    fetch(`/userstoretop5_api/${Id}`)
+    .then(handleResponse)
+    .then(data => {
+        // 자주 방문한 매장 TOP 5
+        const tableBodyDetail = document.getElementById('UserStoreTop5TableBody');
+        tableBodyDetail.innerHTML = '';
+
+        for (let i in data) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${data[i].StoreName}</td>
+                <td>${data[i].OrderNum}</td>
+                `;
+            tableBodyDetail.appendChild(row);
+        }
+
+    })
+    .catch(handleError);
+}
+
+function fetchUserItemTop5(Id) {
+    fetch(`/useritemtop5_api/${Id}`)
+    .then(handleResponse)
+    .then(data => {
+        console.log(data)
+        // 자주 방문한 매장 TOP 5
+        const tableBodyDetail = document.getElementById('UserItemTop5TableBody');
+        tableBodyDetail.innerHTML = '';
+
+        for (let i in data) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${data[i].ItemName}</td>
+                <td>${data[i].OrderNum}</td>
+                `;
+            tableBodyDetail.appendChild(row);
+        }
+
+    })
+    .catch(handleError);
+}
 
 function handleResponse(response) {
     if (!response.ok) {
@@ -53,5 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 
-    fetchStoreDetailData(page);
+    fetchUserDetailData(page);
+    fetchUserStoreTop5(page);
+    fetchUserItemTop5(page);
 });

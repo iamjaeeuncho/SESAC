@@ -45,7 +45,7 @@ function fetchStoreRegularData(Id, orderAt) {
         for (let i in data) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><a href=#>${data[i].UserId}</a></td>
+                <td><a href=/userdetail/${data[i].UserId}>${data[i].UserId}</a></td>
                 <td>${data[i].UserName}</td>
                 <td>${data[i].OrderNum}</td>
                 `;

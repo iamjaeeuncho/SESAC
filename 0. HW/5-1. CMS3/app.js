@@ -55,13 +55,14 @@ app.get('/user_api/:page?', (req, res) => {
   });
 });
 
+
+// USER SEARCH
 app.get('/search/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
 app.get('/search_api/:page?', (req, res) => { 
   const { name, gender } = req.query;
-  console.log(req.url)
 
   let query = 'SELECT * FROM users';
   const param = [];
@@ -111,6 +112,34 @@ app.get('/search_api/:page?', (req, res) => {
   });
 });
 
+// USER
+app.get('/userdetail/:userid?', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'userdetail.html'));
+});
+
+app.get('/userdetail_api/:userid?', (req, res) => {
+  const userid = req.params.userid;
+  const query = `SELECT u.id AS UserId
+                  , u.name AS UserName
+                  , u.gender AS UserGender
+                  , u.birthdate AS UserBirthdate
+                  , u.address AS UserAddress
+                  , o.id AS OrderId
+                  , o.orderat AS OrderAt
+                  , o.storeid AS StoreId
+                FROM users u
+                JOIN orders o ON u.id = o.userid
+                WHERE u.id = '${userid}'`;
+
+  db.all(query, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+  res.json( data )
+  });
+});
 
 
 // STORE
@@ -178,7 +207,6 @@ app.get('/storedetail_api/:page?', (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-  console.log('데이터', data)
   res.json( data )
   });
 });

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CMS</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/userdetail.js"></script>
+</head>
+<body>
+  <div id="main">
+    <nav>
+      <ul>
+        <li><a href="/user">User</a></li>
+        <li><a href="/order">Order</a></li>
+        <li><a href="/orderitem">Order Item</a></li>
+        <li><a href="/item">Item</a></li>
+        <li><a href="/store">Store</a></li>
+      </ul>
+    </nav>
+    <a id="backButton" href="javascript:history.back();">Back</a>
+
+    <h3>고객 정보</h3>
+    <table border="1" id="UserDetailTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Birthdate</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody id="UserDetailTableBody">
+        <!-- Table Rows -->
+      </tbody>
+    </table>
+    
+    <h3>주문 정보</h3>
+    <table border="1" id="UserOrderDetailTable">
+      <thead>
+        <tr>
+          <th>Order Id</th>
+          <th>Purchased Date</th>
+          <th>Purchased Location</th>
+        </tr>
+      </thead>
+      <tbody id="UserOrderDetailTableBody">
+        <!-- Table Rows -->
+      </tbody>
+    </table>
+
+  </div>
+</body>
+</html>

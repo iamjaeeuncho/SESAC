@@ -1,10 +1,10 @@
 function fetchItemData(page) {
-    fetch(`/items/${page}`)
+    fetch(`/item_api/${page}`)
     .then(handleResponse)
     .then(data => {
         console.log(data)
         // 가져온 데이터를 테이블에 동적으로 추가
-        const tableBody = document.getElementById('userTableBody');
+        const tableBody = document.getElementById('itemTableBody');
         tableBody.innerHTML = '';
 
         data.currPageRows.forEach(item => {

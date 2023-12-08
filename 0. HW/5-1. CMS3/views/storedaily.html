@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>CMS</title>
   <link rel="stylesheet" href="/style.css">
-  <script src="/storedetails.js"></script>
+  <script src="/storedaily.js"></script>
 </head>
 <body>
   <div id="main">
@@ -33,16 +33,30 @@
       </tbody>
     </table>
     
-    <h3>월간 매출액</h3>
-    <table border="1" id="StoreTableSales">
+    <h3>일간 매출액</h3>
+    <table border="1" id="StoreDailySalesTable">
       <thead>
         <tr>
-          <th>Month</th>
+          <th>Date</th>
           <th>Revenue</th>
           <th>Count</th>
         </tr>
       </thead>
-      <tbody id="StoreTableBodySales">
+      <tbody id="StoreDailySalesTableBody">
+        <!-- Table Rows -->
+      </tbody>
+    </table>
+
+    <h3>단골 고객</h3>
+    <table border="1" id="StoreRegularTable">
+      <thead>
+        <tr>
+          <th>User Id</th>
+          <th>Name</th>
+          <th>Frequency</th>
+        </tr>
+      </thead>
+      <tbody id="StoreRegularTableBody">
         <!-- Table Rows -->
       </tbody>
     </table>

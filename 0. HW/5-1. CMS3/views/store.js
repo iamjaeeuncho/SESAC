@@ -1,19 +1,19 @@
-function fetchOrderData(page) {
-    fetch(`/orders/${page}`)
+function fetchStoreData(page) {
+    fetch(`store_api/${page}`)
     .then(handleResponse)
     .then(data => {
         console.log(data)
         // 가져온 데이터를 테이블에 동적으로 추가
-        const tableBody = document.getElementById('userTableBody');
+        const tableBody = document.getElementById('storeTableBody');
         tableBody.innerHTML = '';
 
-        data.currPageRows.forEach(order => {
+        data.currPageRows.forEach(store => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><a href="#">${order.Id}</a></td>
-                <td>${order.OrderAt}</td>
-                <td>${order.StoreId}</td>
-                <td>${order.UserId}</td>
+                <td><a href='/storedetail/${store.Id}'>${store.Id}</a></td>
+                <td>${store.Type}</td>
+                <td>${store.Name}</td>
+                <td>${store.Address}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -29,20 +29,20 @@ function fetchOrderData(page) {
         // Add Previous link
         if (data.page > 1) {
             const prevSpan = document.createElement('span');
-            prevSpan.innerHTML = `<a href="/order/${data.page - 1}" onclick="fetchOrderData(${data.page - 1})">Previous</a>`;
+            prevSpan.innerHTML = `<a href="/store/${data.page - 1}" onclick="fetchStoreData(${data.page - 1})">Previous</a>`;
             paginationDiv.appendChild(prevSpan);
         }
 
         for (let num = startPage; num <= endPage; num++) {
             const pageSpan = document.createElement('span');
-            pageSpan.innerHTML = `<a href="/order/${num}" onclick="fetchOrderData(${num})">${num}</a>`;
+            pageSpan.innerHTML = `<a href="/store/${num}" onclick="fetchStoreData(${num})">${num}</a>`;
             paginationDiv.appendChild(pageSpan);
         }
 
         // Add Next link
         if (data.page < data.totalPages) {
             const nextSpan = document.createElement('span');
-            nextSpan.innerHTML = `<a href="/order/${data.page + 1}" onclick="fetchOrderData(${data.page + 1})">Next</a>`;
+            nextSpan.innerHTML = `<a href="/store/${data.page + 1}" onclick="fetchStoreData(${data.page + 1})">Next</a>`;
             paginationDiv.appendChild(nextSpan);
         }
     })
@@ -68,5 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 
-    fetchOrderData(page);
+    fetchStoreData(page);
 });
+

@@ -1,5 +1,5 @@
 function fetchUserData(page) {
-    fetch(`/users/${page}`)
+    fetch(`/user_api/${page}`)
     .then(handleResponse)
     .then(data => {
         // 가져온 데이터를 테이블에 동적으로 추가
@@ -63,7 +63,7 @@ function submitSearch() {
 
 function fetchSearch(page, name, gender) {
     console.log('Fetching search:', page, name, gender);
-    fetch(`/searchform/${page}/?name=${name}&gender=${gender}`)
+    fetch(`/search_api/${page}/?name=${name}&gender=${gender}`)
     .then(handleResponse)
     .then(data => {
         console.log("Received data:", data);

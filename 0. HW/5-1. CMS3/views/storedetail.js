@@ -1,12 +1,25 @@
+// Function to handle HTTP responses
+function handleResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
+
+// Function to handle errors
+function handleError(error) {
+    console.error('Error fetching user data:', error);
+}
+
+// Function to fetch store detail results
 function fetchStoreDetailData(Id) {
     fetch(`/storedetail_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        console.log(data)
-        // 가져온 데이터를 테이블에 동적으로 추가
         const tableBody = document.getElementById('StoreDetailTableBody');
         tableBody.innerHTML = '';
 
+        // Store Information
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${data[1].StoreName}</td>
@@ -14,7 +27,7 @@ function fetchStoreDetailData(Id) {
             <td>${data[1].StoreAddress}</td>`;
         tableBody.appendChild(row);
         
-        // 월간 매출액
+        // Monthly Sales
         const tableBodySales = document.getElementById('StoreSalesTableBody');
         tableBodySales.innerHTML = '';
 
@@ -27,27 +40,12 @@ function fetchStoreDetailData(Id) {
                 `;
             tableBodySales.appendChild(row);
         }
-
     })
     .catch(handleError);
 }
 
-
-function handleResponse(response) {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
-
-function handleError(error) {
-    console.error('Error fetching user data:', error);
-}
-
-
-// 페이지 로드 시 데이터 가져오기
+// Event listener for page load
 document.addEventListener('DOMContentLoaded', () => {
-    // 서버에서 데이터를 가져오는 함수
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 

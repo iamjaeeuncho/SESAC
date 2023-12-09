@@ -1,8 +1,22 @@
+// Function to handle HTTP responses
+function handleResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
+
+// Function to handle errors
+function handleError(error) {
+    console.error('Error fetching user data:', error);
+}
+
+// Function to fetch user detail data
 function fetchUserDetailData(Id) {
     fetch(`/userdetail_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        // 고객 정보
+        // User information
         const tableBody = document.getElementById('UserDetailTableBody');
         tableBody.innerHTML = '';
 
@@ -15,7 +29,7 @@ function fetchUserDetailData(Id) {
             <td>${data[0].UserAddress}</td>`;
         tableBody.appendChild(row);
         
-        // 주문 정보
+        // Order Information
         const tableBodyDetail = document.getElementById('UserOrderDetailTableBody');
         tableBodyDetail.innerHTML = '';
 
@@ -28,16 +42,15 @@ function fetchUserDetailData(Id) {
                 `;
             tableBodyDetail.appendChild(row);
         }
-
     })
     .catch(handleError);
 }
 
+// Function to fetch user store top5 data
 function fetchUserStoreTop5(Id) {
     fetch(`/userstoretop5_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        // 자주 방문한 매장 TOP 5
         const tableBodyDetail = document.getElementById('UserStoreTop5TableBody');
         tableBodyDetail.innerHTML = '';
 
@@ -54,12 +67,11 @@ function fetchUserStoreTop5(Id) {
     .catch(handleError);
 }
 
+// Function to fetch user item top5 data
 function fetchUserItemTop5(Id) {
     fetch(`/useritemtop5_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        console.log(data)
-        // 자주 방문한 매장 TOP 5
         const tableBodyDetail = document.getElementById('UserItemTop5TableBody');
         tableBodyDetail.innerHTML = '';
 
@@ -71,26 +83,13 @@ function fetchUserItemTop5(Id) {
                 `;
             tableBodyDetail.appendChild(row);
         }
-
     })
     .catch(handleError);
 }
 
-function handleResponse(response) {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
 
-function handleError(error) {
-    console.error('Error fetching user data:', error);
-}
-
-
-// 페이지 로드 시 데이터 가져오기
+// Event listener for page load
 document.addEventListener('DOMContentLoaded', () => {
-    // 서버에서 데이터를 가져오는 함수
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 

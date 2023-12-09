@@ -1,10 +1,53 @@
+// Pagination links
+function renderPaginationLinks(data, fetchFunction, extraParams = '') {
+    const paginationDiv = document.getElementById('pagination');
+    paginationDiv.innerHTML = '';
+
+    const maxButtonsToShow = 10;
+    const startPage = Math.max(1, data.page - Math.floor(maxButtonsToShow / 2));
+    const endPage = Math.min(data.totalPages, startPage + maxButtonsToShow - 1);
+
+    // Previous link
+    if (data.page > 1) {
+        const prevSpan = document.createElement('span');
+        prevSpan.innerHTML = `<a id="searchLink" onclick="${fetchFunction}('${data.page - 1}', ${extraParams})">Previous</a>`;
+        paginationDiv.appendChild(prevSpan);
+    }
+
+    // Numeric page links
+    for (let num = startPage; num <= endPage; num++) {
+        const pageSpan = document.createElement('span');
+        pageSpan.innerHTML = `<a id="searchLink" onclick="${fetchFunction}('${num}', ${extraParams})">${num}</a>`;
+        paginationDiv.appendChild(pageSpan);
+    }
+
+    // Next link
+    if (data.page < data.totalPages) {
+        const nextSpan = document.createElement('span');
+        nextSpan.innerHTML = `<a id="searchLink" onclick="${fetchFunction}('${data.page + 1}', ${extraParams})">Next</a>`;
+        paginationDiv.appendChild(nextSpan);
+    }
+}
+
+// Function to handle HTTP responses
+function handleResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
+
+// Function to handle errors
+function handleError(error) {
+    console.error('Error fetching user data:', error);
+}
+
+// Function to fetch item detail data
 function fetchItemDetailData(Id) {
     fetch(`/itemdetail_api/${Id}`)
     .then(handleResponse)
     .then(data => {
-        console.log(data)
-
-        // 상품 정보
+        // Item Information
         const tableBody = document.getElementById('ItemDetailTableBody');
         tableBody.innerHTML = '';
 
@@ -15,7 +58,7 @@ function fetchItemDetailData(Id) {
             `;
         tableBody.appendChild(row);
         
-        // 월간 매출액
+        // Monthly Sales
         const tableBodyDetail = document.getElementById('ItemMonthlySalesTableBody');
         tableBodyDetail.innerHTML = '';
 
@@ -33,23 +76,8 @@ function fetchItemDetailData(Id) {
     .catch(handleError);
 }
 
-
-
-function handleResponse(response) {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
-
-function handleError(error) {
-    console.error('Error fetching user data:', error);
-}
-
-
-// 페이지 로드 시 데이터 가져오기
+// Event listener for page load
 document.addEventListener('DOMContentLoaded', () => {
-    // 서버에서 데이터를 가져오는 함수
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 

@@ -5,147 +5,141 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+// SQLite3 DB
+const db = new sqlite3.Database('mycrm.db');
 
-// SQLite3 데이터베이스 연결
-const db = new sqlite3.Database('mycrm1.db');
-
-
-// Views 폴더 지정
+// Views Folder
 app.use(express.static(path.join(__dirname, 'views')));
 
-
-// 라우트
+// Main Page
 app.get('/', (req, res) => {
-  res.redirect('/user');
+    res.redirect('/user');
 });
 
+// Function for pagination
+function paginateData(rows, page, itemsPerPage) {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    
+    const currPageRows = rows.slice(startIndex, endIndex);
+    
+    return currPageRows;
+}
+
+function calculateTotalPages(totalRows, itemsPerPage) {
+    return Math.ceil(totalRows / itemsPerPage);
+}
+
+// Funtion to handle DB Error
+function handleDatabaseError(res, err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
 
 // USER
 app.get('/user/:page?', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'user.html'));
+    res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
 app.get('/user_api/:page?', (req, res) => {
-  const query = 'SELECT * FROM users';
+    const query = 'SELECT * FROM users';
 
-  db.all(query, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    db.all(query, (err, rows) => {
+        if (err) return handleDatabaseError(res, err);
+        
+        const itemsPerPage = 20;
+        const page = parseInt(req.params.page) || 1;
+        const currPageRows = paginateData(rows, page, itemsPerPage);
+        const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
-
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
-    
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    
-    res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        res.json({
+        currPageRows,
+        totalPages,
+        page,
+        });
+    });
 });
-
 
 // USER SEARCH
 app.get('/search/:page?', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'user.html'));
+    res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
 app.get('/search_api/:page?', (req, res) => { 
-  const { name, gender } = req.query;
+    const { name, gender } = req.query;
 
-  let query = 'SELECT * FROM users';
-  const param = [];
+    let query = 'SELECT * FROM users';
+    const param = [];
 
-  if (name || gender) {
+    if (name || gender) {
     query += ' WHERE';
-  }
+    }
 
-  if (name) {
+    if (name) {
     query += ' Name LIKE ?';
     param.push(`%${name}%`);
-  }
+    }
 
-  if (name && gender) {
+    if (name && gender) {
     query += ' AND';
-  }
+    }
 
-  if (gender) {
+    if (gender) {
     query += ' Gender = ?';
     param.push(`${gender}`);
-  }
-
-  db.all(query, param, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
     }
-    
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
 
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
+    db.all(query, param, (err, rows) => {
+        if (err) return handleDatabaseError(res, err);
     
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    console.log(currPageRows, totalPages, page)
+        const itemsPerPage = 20;
+        const page = parseInt(req.params.page) || 1;
+        const currPageRows = paginateData(rows, page, itemsPerPage);
+        const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        res.json({
+            currPageRows,
+            totalPages,
+            page,
+        });
+    });
 });
 
-// USER
+// USER DETAIL
 app.get('/userdetail/:userid?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'userdetail.html'));
 });
 
 app.get('/userdetail_api/:userid?', (req, res) => {
-  const userid = req.params.userid;
-  const query = `SELECT u.id AS UserId
-                  , u.name AS UserName
-                  , u.gender AS UserGender
-                  , u.age AS UserAge
-                  , u.birthdate AS UserBirthdate
-                  , u.address AS UserAddress
-                  , o.id AS OrderId
-                  , o.orderat AS OrderAt
-                  , o.storeid AS StoreId
+    const userid = req.params.userid;
+    const query = `SELECT u.id AS UserId
+                    , u.name AS UserName
+                    , u.gender AS UserGender
+                    , u.age AS UserAge
+                    , u.birthdate AS UserBirthdate
+                    , u.address AS UserAddress
+                    , o.id AS OrderId
+                    , o.orderat AS OrderAt
+                    , o.storeid AS StoreId
                 FROM users u
                 JOIN orders o ON u.id = o.userid
                 WHERE u.id = '${userid}'`;
 
-  db.all(query, (err, data) => {
+    db.all(query, (err, data) => {
     if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(err);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-  res.json( data )
-  });
+    res.json( data )
+    });
 });
 
 app.get('/userstoretop5_api/:userid?', (req, res) => {
-  const userid = req.params.userid;
-  const query = `SELECT o.userid AS UserId
-                      , s.name AS StoreName
-                      , COUNT(DISTINCT oi.orderid) AS OrderNum
+    const userid = req.params.userid;
+    const query = `SELECT o.userid AS UserId
+                        , s.name AS StoreName
+                        , COUNT(DISTINCT oi.orderid) AS OrderNum
                 FROM orders o
                 JOIN stores s ON o.storeid = s.id
                 JOIN orderitems oi ON o.id = oi.orderid
@@ -154,22 +148,22 @@ app.get('/userstoretop5_api/:userid?', (req, res) => {
                 ORDER BY COUNT(DISTINCT oi.orderid) DESC LIMIT 5
                 `;
 
-  db.all(query, (err, data) => {
+    db.all(query, (err, data) => {
     if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(err);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-  res.json( data )
-  });
+    res.json( data )
+    });
 });
 
 app.get('/useritemtop5_api/:userid?', (req, res) => {
-  const userid = req.params.userid;
-  const query = `SELECT o.userid AS UserId
-                  , i.id AS ItemId
-                  , i.name AS ItemName
-                  , COUNT(oi.orderid) AS OrderNum
+    const userid = req.params.userid;
+    const query = `SELECT o.userid AS UserId
+                    , i.id AS ItemId
+                    , i.name AS ItemName
+                    , COUNT(oi.orderid) AS OrderNum
                 FROM orders o
                 JOIN orderitems oi ON o.id = oi.orderid
                 JOIN items i ON oi.itemid = i.id
@@ -178,52 +172,39 @@ app.get('/useritemtop5_api/:userid?', (req, res) => {
                 ORDER BY COUNT(oi.orderid) DESC LIMIT 5
                 `;
 
-  db.all(query, (err, data) => {
+    db.all(query, (err, data) => {
     if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(err);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 
-  res.json( data )
-  });
+    res.json( data )
+    });
 });
 
-
 // STORE
-
 app.get('/store/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'store.html'));
 });
 
 app.get('/store_api/:page?', (req, res) => {
-  const query = 'SELECT * FROM stores';
+    const query = 'SELECT * FROM stores';
 
-  db.all(query, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    db.all(query, (err, rows) => {
+    if (err) return handleDatabaseError(res, err);
 
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
+    const itemsPerPage = 20;
+    const page = parseInt(req.params.page) || 1;
+    const currPageRows = paginateData(rows, page, itemsPerPage);
+    const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
-    
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    
     res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        currPageRows,
+        totalPages,
+        page,
+    });
+    });
 });
-
 
 app.get('/storedetail/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'storedetail.html'));
@@ -316,40 +297,28 @@ app.get('/storeregular_api/:storeId/:orderAt?', (req, res) => {
   });
 });
 
-
 // ITEM
-
 app.get('/item/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'item.html'));
 });
 
 app.get('/item_api/:page?', (req, res) => {
-  const query = 'SELECT * FROM items';
+    const query = 'SELECT * FROM items';
 
-  db.all(query, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    db.all(query, (err, rows) => {
+    if (err) return handleDatabaseError(res, err);
 
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
+    const itemsPerPage = 20;
+    const page = parseInt(req.params.page) || 1;
+    const currPageRows = paginateData(rows, page, itemsPerPage);
+    const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
-    
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    
     res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        currPageRows,
+        totalPages,
+        page,
+    });
+    });
 });
 
 app.get('/itemdetail/:page?', (req, res) => {
@@ -382,10 +351,7 @@ app.get('/itemdetail_api/:itemid?', (req, res) => {
   });
 });
 
-
-
 // ORDERITEM
-
 app.get('/orderitem/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'orderitem.html'));
 });
@@ -394,34 +360,22 @@ app.get('/orderitem_api/:page?', (req, res) => {
   const query = 'SELECT * FROM orderitems';
 
   db.all(query, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    if (err) return handleDatabaseError(res, err);
 
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
+    const itemsPerPage = 20;
+    const page = parseInt(req.params.page) || 1;
+    const currPageRows = paginateData(rows, page, itemsPerPage);
+    const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
-    
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    
     res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        currPageRows,
+        totalPages,
+        page,
+    });
+    });
 });
 
-
 // ORDER
-
 app.get('/order/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'order.html'));
 });
@@ -430,34 +384,22 @@ app.get('/order_api/:page?', (req, res) => {
   const query = 'SELECT * FROM orders';
 
   db.all(query, (err, rows) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+    if (err) return handleDatabaseError(res, err);
 
-    // 원하는 페이지로 이동
-    const itemsPerPage = 10;
-    let page = req.params.page || 1;
-    let startIndex = (page - 1) * itemsPerPage;
-    let endIndex = startIndex + itemsPerPage;
+    const itemsPerPage = 20;
+    const page = parseInt(req.params.page) || 1;
+    const currPageRows = paginateData(rows, page, itemsPerPage);
+    const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
-    // 전체 페이지수 계산
-    const totalPages = Math.ceil(rows.length / itemsPerPage);
-    
-    // 읽은 데이터 앞에 itemsPerPage개만 주기
-    const currPageRows = rows.slice(startIndex, endIndex);
-    
     res.json({
-      currPageRows: currPageRows,
-      totalPages: totalPages,
-      page: parseInt(page)
-    })
-  });
+        currPageRows,
+        totalPages,
+        page,
+    });
+    });
 });
 
-
-
-// 서버 생성
+// Server Port
 app.listen(port, () => {
   console.log(`서버가 ${port}에서 실행 중입니다`);
 });

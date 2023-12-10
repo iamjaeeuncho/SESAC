@@ -1,3 +1,33 @@
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
+    fetchItemData(page);
+});
+
+function fetchItemData(page) {
+    fetch(`/item_api/${page}`)
+    .then(handleResponse)
+    .then(data => {
+        const tableBody = document.getElementById('itemTableBody');
+        tableBody.innerHTML = '';
+
+        data.currPageRows.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><a href='/itemdetail/${item.Id}'>${item.Id}</a></td>
+                <td>${item.Type}</td>
+                <td>${item.Name}</td>
+                <td>${item.UnitPrice}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        renderPaginationLinks(data, 'fetchItemData');
+    })
+    .catch(handleError);
+}
+
 // Pagination links
 function renderPaginationLinks(data, fetchFunction, extraParams = '') {
     const paginationDiv = document.getElementById('pagination');
@@ -41,33 +71,3 @@ function handleResponse(response) {
 function handleError(error) {
     console.error('Error fetching user data:', error);
 }
-
-function fetchItemData(page) {
-    fetch(`/item_api/${page}`)
-    .then(handleResponse)
-    .then(data => {
-        const tableBody = document.getElementById('itemTableBody');
-        tableBody.innerHTML = '';
-
-        data.currPageRows.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><a href='/itemdetail/${item.Id}'>${item.Id}</a></td>
-                <td>${item.Type}</td>
-                <td>${item.Name}</td>
-                <td>${item.UnitPrice}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-        renderPaginationLinks(data, 'fetchItemData');
-    })
-    .catch(handleError);
-}
-
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchItemData(page);
-});

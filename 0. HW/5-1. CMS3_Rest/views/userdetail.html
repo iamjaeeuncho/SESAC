@@ -17,7 +17,9 @@
         <li><a href="/store">Store</a></li>
       </ul>
     </nav>
-    <a id="backButton" href="javascript:history.back();">Back</a>
+    <div id="backbutton">
+      <a href="javascript:history.back();">Back</a>
+    </div>
 
     <h3>고객 정보</h3>
     <table border="1" id="UserDetailTable">
@@ -65,9 +67,9 @@
     <table border="1" id="UserOrderDetailTable">
       <thead>
         <tr>
+          <th>Order At</th>
           <th>Order Id</th>
-          <th>Purchased Date</th>
-          <th>Purchased Location</th>
+          <th>Store Id</th>
         </tr>
       </thead>
       <tbody id="UserOrderDetailTableBody">

@@ -1,3 +1,34 @@
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
+    fetchOrderData(page);
+});
+
+// Function to fetch order data
+function fetchOrderData(page) {
+    fetch(`/order_api/${page}`)
+    .then(handleResponse)
+    .then(data => {
+        const tableBody = document.getElementById('orderTableBody');
+        tableBody.innerHTML = '';
+
+        data.currPageRows.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><a href="/orderdetail/${order.Id}">${order.Id}</a></td>
+                <td>${order.OrderAt}</td>
+                <td>${order.StoreId}</td>
+                <td>${order.UserId}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        renderPaginationLinks(data, 'fetchOrderData');
+    })
+    .catch(handleError);
+}
+
 // Pagination links
 function renderPaginationLinks(data, fetchFunction, extraParams = '') {
     const paginationDiv = document.getElementById('pagination');
@@ -41,34 +72,3 @@ function handleResponse(response) {
 function handleError(error) {
     console.error('Error fetching user data:', error);
 }
-
-// Function to fetch order data
-function fetchOrderData(page) {
-    fetch(`/order_api/${page}`)
-    .then(handleResponse)
-    .then(data => {
-        const tableBody = document.getElementById('orderTableBody');
-        tableBody.innerHTML = '';
-
-        data.currPageRows.forEach(order => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><a href="#">${order.Id}</a></td>
-                <td>${order.OrderAt}</td>
-                <td>${order.StoreId}</td>
-                <td>${order.UserId}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-        renderPaginationLinks(data, 'fetchOrderData');
-    })
-    .catch(handleError);
-}
-
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchOrderData(page);
-});

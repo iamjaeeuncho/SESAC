@@ -1,3 +1,71 @@
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
+    fetchUserData(page);
+});
+
+// Event listener for search form submission
+function submitSearch() {
+    const page = window.location.pathname.split('/')[2] || 1;
+    const name = document.getElementById("name").value;
+    const gender = document.getElementById("gender").value;
+
+    fetchSearch(page, name, gender);
+}
+
+// Function to fetch user data
+function fetchUserData(page) {
+    fetch(`/user_api/${page}`)
+        .then(handleResponse)
+        .then(data => {
+            const tableBody = document.getElementById('userTableBody');
+            tableBody.innerHTML = '';
+
+            data.currPageRows.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="/userdetail/${user.Id}">${user.Id}</a></td>
+                    <td>${user.Name}</td>
+                    <td>${user.Gender}</td>
+                    <td>${user.Age}</td>
+                    <td>${user.Birthdate}</td>
+                    <td>${user.Address}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            renderPaginationLinks(data, 'fetchUserData');
+        })
+        .catch(handleError);
+}
+
+// Function to fetch search results
+function fetchSearch(page, name, gender) {
+    fetch(`/search_api/${page}/?name=${name}&gender=${gender}`)
+        .then(handleResponse)
+        .then(data => {
+            const tableBody = document.getElementById('userTableBody');
+            tableBody.innerHTML = '';
+
+            data.currPageRows.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="/userdetail/${user.Id}">${user.Id}</a></td>
+                    <td>${user.Name}</td>
+                    <td>${user.Gender}</td>
+                    <td>${user.Age}</td>
+                    <td>${user.Birthdate}</td>
+                    <td>${user.Address}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            renderPaginationLinks(data, 'fetchSearch', `'${name}', '${gender}'`);
+        })
+        .catch(handleError);
+}
+
 // Pagination links
 function renderPaginationLinks(data, fetchFunction, extraParams = '') {
     const paginationDiv = document.getElementById('pagination');
@@ -42,70 +110,3 @@ function handleError(error) {
     console.error('Error fetching user data:', error);
 }
 
-// Function to fetch user data
-function fetchUserData(page) {
-    fetch(`/user_api/${page}`)
-        .then(handleResponse)
-        .then(data => {
-            const tableBody = document.getElementById('userTableBody');
-            tableBody.innerHTML = '';
-
-            data.currPageRows.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.Id}</td>
-                    <td>${user.Name}</td>
-                    <td>${user.Gender}</td>
-                    <td>${user.Age}</td>
-                    <td>${user.Birthdate}</td>
-                    <td>${user.Address}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-            renderPaginationLinks(data, 'fetchUserData');
-        })
-        .catch(handleError);
-}
-
-// Function to fetch search results
-function fetchSearch(page, name, gender) {
-    fetch(`/search_api/${page}/?name=${name}&gender=${gender}`)
-        .then(handleResponse)
-        .then(data => {
-            const tableBody = document.getElementById('userTableBody');
-            tableBody.innerHTML = '';
-
-            data.currPageRows.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.Id}</td>
-                    <td>${user.Name}</td>
-                    <td>${user.Gender}</td>
-                    <td>${user.Age}</td>
-                    <td>${user.Birthdate}</td>
-                    <td>${user.Address}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            renderPaginationLinks(data, 'fetchSearch', `'${name}', '${gender}'`);
-        })
-        .catch(handleError);
-}
-
-// Event listener for search form submission
-function submitSearch() {
-    const page = window.location.pathname.split('/')[2] || 1;
-    const name = document.getElementById("name").value;
-    const gender = document.getElementById("gender").value;
-
-    fetchSearch(page, name, gender);
-}
-
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchUserData(page);
-});

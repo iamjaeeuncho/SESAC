@@ -1,15 +1,10 @@
-// Function to handle HTTP responses
-function handleResponse(response) {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
 
-// Function to handle errors
-function handleError(error) {
-    console.error('Error fetching user data:', error);
-}
+    fetchStoreDetailData(page);
+});
 
 // Function to fetch store detail results
 function fetchStoreDetailData(Id) {
@@ -44,10 +39,15 @@ function fetchStoreDetailData(Id) {
     .catch(handleError);
 }
 
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
+// Function to handle HTTP responses
+function handleResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
 
-    fetchStoreDetailData(page);
-});
+// Function to handle errors
+function handleError(error) {
+    console.error('Error fetching user data:', error);
+}

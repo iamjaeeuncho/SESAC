@@ -1,3 +1,34 @@
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
+    fetchStoreData(page);
+});
+
+// Function to fetch store data
+function fetchStoreData(page) {
+    fetch(`store_api/${page}`)
+    .then(handleResponse)
+    .then(data => {
+        const tableBody = document.getElementById('storeTableBody');
+        tableBody.innerHTML = '';
+
+        data.currPageRows.forEach(store => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><a href="/storedetail/${store.Id}">${store.Id}</a></td>
+                <td>${store.Type}</td>
+                <td>${store.Name}</td>
+                <td>${store.Address}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+        renderPaginationLinks(data, 'fetchStoreData');
+    })
+    .catch(handleError);
+}
+
 // Pagination links
 function renderPaginationLinks(data, fetchFunction, extraParams = '') {
     const paginationDiv = document.getElementById('pagination');
@@ -41,36 +72,3 @@ function handleResponse(response) {
 function handleError(error) {
     console.error('Error fetching user data:', error);
 }
-
-// Function to fetch store data
-function fetchStoreData(page) {
-    fetch(`store_api/${page}`)
-    .then(handleResponse)
-    .then(data => {
-        const tableBody = document.getElementById('storeTableBody');
-        tableBody.innerHTML = '';
-
-        data.currPageRows.forEach(store => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><a href='/storedetail/${store.Id}'>${store.Id}</a></td>
-                <td>${store.Type}</td>
-                <td>${store.Name}</td>
-                <td>${store.Address}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-        renderPaginationLinks(data, 'fetchStoreData');
-    })
-    .catch(handleError);
-}
-
-
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchStoreData(page);
-});
-

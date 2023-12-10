@@ -1,15 +1,12 @@
-// Function to handle HTTP responses
-function handleResponse(response) {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
 
-// Function to handle errors
-function handleError(error) {
-    console.error('Error fetching user data:', error);
-}
+    fetchUserDetailData(page);
+    fetchUserStoreTop5(page);
+    fetchUserItemTop5(page);
+});
 
 // Function to fetch user detail data
 function fetchUserDetailData(Id) {
@@ -19,28 +16,28 @@ function fetchUserDetailData(Id) {
         // User information
         const tableBody = document.getElementById('UserDetailTableBody');
         tableBody.innerHTML = '';
-
+        
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${data[0].UserName}</td>
-            <td>${data[0].UserGender}</td>
-            <td>${data[0].UserAge}</td>
-            <td>${data[0].UserBirthdate}</td>
-            <td>${data[0].UserAddress}</td>`;
+        <td>${data[0].UserName}</td>
+        <td>${data[0].UserGender}</td>
+        <td>${data[0].UserAge}</td>
+        <td>${data[0].UserBirthdate}</td>
+        <td>${data[0].UserAddress}</td>`;
         tableBody.appendChild(row);
         
         // Order Information
         const tableBodyDetail = document.getElementById('UserOrderDetailTableBody');
         tableBodyDetail.innerHTML = '';
-
+        
         for (let i in data) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${data[i].OrderId}</td>
                 <td>${data[i].OrderAt}</td>
-                <td>${data[i].StoreId}</td>
+                <td><a href="/orderdetail/${data[i].OrderId}">${data[i].OrderId}</a></td>
+                <td><a href="/storedetail/${data[i].StoreId}">${data[i].StoreId}</a></td>
                 `;
-            tableBodyDetail.appendChild(row);
+                tableBodyDetail.appendChild(row);
         }
     })
     .catch(handleError);
@@ -60,9 +57,9 @@ function fetchUserStoreTop5(Id) {
                 <td>${data[i].StoreName}</td>
                 <td>${data[i].OrderNum}</td>
                 `;
-            tableBodyDetail.appendChild(row);
+                tableBodyDetail.appendChild(row);
         }
-
+        
     })
     .catch(handleError);
 }
@@ -74,7 +71,7 @@ function fetchUserItemTop5(Id) {
     .then(data => {
         const tableBodyDetail = document.getElementById('UserItemTop5TableBody');
         tableBodyDetail.innerHTML = '';
-
+        
         for (let i in data) {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -82,18 +79,20 @@ function fetchUserItemTop5(Id) {
                 <td>${data[i].OrderNum}</td>
                 `;
             tableBodyDetail.appendChild(row);
-        }
+            }
     })
     .catch(handleError);
 }
 
+// Function to handle HTTP responses
+function handleResponse(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
 
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchUserDetailData(page);
-    fetchUserStoreTop5(page);
-    fetchUserItemTop5(page);
-});
+// Function to handle errors
+function handleError(error) {
+    console.error('Error fetching user data:', error);
+}

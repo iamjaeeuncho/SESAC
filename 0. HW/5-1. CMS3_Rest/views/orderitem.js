@@ -1,3 +1,33 @@
+// Event listener for page load
+document.addEventListener('DOMContentLoaded', () => {
+    const url = new URL(window.location.href);
+    const page = url.pathname.split('/')[2] || 1;
+
+    fetchOrderItemData(page);
+});
+
+// Function to fetch orderitem data
+function fetchOrderItemData(page) {
+    fetch(`/orderitem_api/${page}`)
+    .then(handleResponse)
+    .then(data => {
+        const tableBody = document.getElementById('orderItemTableBody');
+        tableBody.innerHTML = '';
+
+        data.currPageRows.forEach(orderitem => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${orderitem.Id}</td>
+                <td><a href="/orderdetail/${orderitem.OrderId}">${orderitem.OrderId}</a></td>
+                <td><a href="/itemdetail/${orderitem.ItemId}">${orderitem.ItemId}</a></td>
+            `;
+            tableBody.appendChild(row);
+        });
+        renderPaginationLinks(data, 'fetchOrderItemData');
+    })
+    .catch(handleError);
+}
+
 // Pagination links
 function renderPaginationLinks(data, fetchFunction, extraParams = '') {
     const paginationDiv = document.getElementById('pagination');
@@ -41,33 +71,3 @@ function handleResponse(response) {
 function handleError(error) {
     console.error('Error fetching user data:', error);
 }
-
-// Function to fetch orderitem data
-function fetchOrderItemData(page) {
-    fetch(`/orderitem_api/${page}`)
-    .then(handleResponse)
-    .then(data => {
-        const tableBody = document.getElementById('orderItemTableBody');
-        tableBody.innerHTML = '';
-
-        data.currPageRows.forEach(orderitem => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${orderitem.Id}</td>
-                <td><a href="#">${orderitem.ItemId}</a></td>
-                <td><a href="#">${orderitem.OrderId}</a></td>
-            `;
-            tableBody.appendChild(row);
-        });
-        renderPaginationLinks(data, 'fetchOrderItemData');
-    })
-    .catch(handleError);
-}
-
-// Event listener for page load
-document.addEventListener('DOMContentLoaded', () => {
-    const url = new URL(window.location.href);
-    const page = url.pathname.split('/')[2] || 1;
-
-    fetchOrderItemData(page);
-});

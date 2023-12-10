@@ -206,12 +206,12 @@ app.get('/store_api/:page?', (req, res) => {
     });
 });
 
-app.get('/storedetail/:page?', (req, res) => {
+app.get('/storedetail/:storeId?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'storedetail.html'));
 });
 
-app.get('/storedetail_api/:page?', (req, res) => {
-  const storeId = req.params.page;
+app.get('/storedetail_api/:storeId?', (req, res) => {
+  const storeId = req.params.storeId;
   
   const query = `SELECT s.id AS StoreId
                   , s.name AS StoreName
@@ -321,7 +321,7 @@ app.get('/item_api/:page?', (req, res) => {
     });
 });
 
-app.get('/itemdetail/:page?', (req, res) => {
+app.get('/itemdetail/:itemid?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'itemdetail.html'));
 });
 
@@ -396,6 +396,21 @@ app.get('/order_api/:page?', (req, res) => {
         totalPages,
         page,
     });
+    });
+});
+
+app.get('/orderdetail/:orderId?', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'orderdetail.html'));
+});
+
+app.get('/orderdetail_api/:orderId?', (req, res) => {
+  const orderId = req.params.orderId;
+  const query = `SELECT * FROM orders WHERE id = '${orderId}'`;
+  
+  db.all(query, (err, data) => {
+    if (err) return handleDatabaseError(res, err);
+
+    res.json( data );
     });
 });
 

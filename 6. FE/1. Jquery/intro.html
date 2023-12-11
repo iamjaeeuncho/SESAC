@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jquery</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    </head>
+    <body>
+        <h1 id = "myHeading">헬로우 제이쿼리</h1>
+        <button id = "changeTextBtn">Change Text</button>
+
+        <script>
+            // 제이쿼리
+            $(document).ready(function () {
+                $('#changeTextBtn').click(function() {
+                    $('#myHeading').text('텍스트 변경')
+                })
+            });
+            
+            // 제이쿼리 안 썼을 때
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     document.getElementById('changeTextBtn').addEventListener('click', function() { 
+            //         document.getElementById('myHeading').textContent = '텍스트 변경'
+            //     });
+            // });
+        </script>
+    </body>
+</html>

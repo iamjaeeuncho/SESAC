@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to fetch store data
 function fetchStoreData(page) {
-    fetch(`store_api/${page}`)
+    fetch(`/api/store/${page}`)
     .then(handleResponse)
     .then(data => {
         const tableBody = document.getElementById('storeTableBody');

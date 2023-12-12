@@ -2,18 +2,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
-    const orderAt = url.pathname.split('/')[3] || 1;
 
-    fetchStoreDailyData(page, orderAt);
-    fetchStoreRegularData(page, orderAt);
+    fetchStoreDetailData(page);
 });
 
-// Function to fetch store daily data
-function fetchStoreDailyData(Id, orderAt) {
-    fetch(`/storedaily_api/${Id}/${orderAt}`)
+// Function to fetch store detail results
+function fetchStoreDetailData(Id) {
+    fetch(`/api/storedetail/${Id}`)
     .then(handleResponse)
     .then(data => {
-        const tableBody = document.getElementById('StoreTableBody');
+        const tableBody = document.getElementById('StoreDetailTableBody');
         tableBody.innerHTML = '';
 
         // Store Information
@@ -24,39 +22,18 @@ function fetchStoreDailyData(Id, orderAt) {
             <td>${data[1].StoreAddress}</td>`;
         tableBody.appendChild(row);
         
-        // Daily Sales
-        const tableBodySales = document.getElementById('StoreDailySalesTableBody');
+        // Monthly Sales
+        const tableBodySales = document.getElementById('StoreSalesTableBody');
         tableBodySales.innerHTML = '';
 
         for (let i in data) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${data[i].OrderAt}</td>
+                <td><a href=/storedaily/${data[1].StoreId}/${data[i].OrderAt}>${data[i].OrderAt}</a></td>
                 <td>${data[i].TotalSales}</td>
                 <td>${data[i].OrderNum}</td>
                 `;
             tableBodySales.appendChild(row);
-        }
-    })
-    .catch(handleError);
-}
-
-// Function to fetch store regular data
-function fetchStoreRegularData(Id, orderAt) {
-    fetch(`/storeregular_api/${Id}/${orderAt}`)
-    .then(handleResponse)
-    .then(data => {
-        const tableBodyRegular = document.getElementById('StoreRegularTableBody');
-        tableBodyRegular.innerHTML = '';
-
-        for (let i in data) {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><a href=/userdetail/${data[i].UserId}>${data[i].UserId}</a></td>
-                <td>${data[i].UserName}</td>
-                <td>${data[i].OrderNum}</td>
-                `;
-            tableBodyRegular.appendChild(row);
         }
     })
     .catch(handleError);

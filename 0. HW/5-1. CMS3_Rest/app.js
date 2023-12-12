@@ -8,8 +8,13 @@ const port = 3000;
 // SQLite3 DB
 const db = new sqlite3.Database('mycrm.db');
 
-// Views Folder
-app.use(express.static(path.join(__dirname, 'views')));
+app.use((req, res, next) => {
+  console.log(req.url);
+  next();
+})
+// Folder
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'utils')));
 
 // Main Page
 app.get('/', (req, res) => {
@@ -41,7 +46,7 @@ app.get('/user/:page?', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
-app.get('/user_api/:page?', (req, res) => {
+app.get('/api/user/:page?', (req, res) => {
     const query = 'SELECT * FROM users';
 
     db.all(query, (err, rows) => {
@@ -53,9 +58,9 @@ app.get('/user_api/:page?', (req, res) => {
         const totalPages = calculateTotalPages(rows.length, itemsPerPage);
 
         res.json({
-        currPageRows,
-        totalPages,
-        page,
+          currPageRows,
+          totalPages,
+          page,
         });
     });
 });
@@ -65,19 +70,19 @@ app.get('/search/:page?', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'user.html'));
 });
 
-app.get('/search_api/:page?', (req, res) => { 
+app.get('/api/search/:page?', (req, res) => { 
     const { name, gender } = req.query;
 
     let query = 'SELECT * FROM users';
     const param = [];
 
     if (name || gender) {
-    query += ' WHERE';
+      query += ' WHERE';
     }
 
     if (name) {
-    query += ' Name LIKE ?';
-    param.push(`%${name}%`);
+      query += ' Name LIKE ?';
+      param.push(`%${name}%`);
     }
 
     if (name && gender) {
@@ -110,7 +115,7 @@ app.get('/userdetail/:userid?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'userdetail.html'));
 });
 
-app.get('/userdetail_api/:userid?', (req, res) => {
+app.get('/api/userdetail/:userid?', (req, res) => {
     const userid = req.params.userid;
     const query = `SELECT u.id AS UserId
                     , u.name AS UserName
@@ -135,7 +140,7 @@ app.get('/userdetail_api/:userid?', (req, res) => {
     });
 });
 
-app.get('/userstoretop5_api/:userid?', (req, res) => {
+app.get('/api/userstoretop5/:userid?', (req, res) => {
     const userid = req.params.userid;
     const query = `SELECT o.userid AS UserId
                         , s.name AS StoreName
@@ -158,7 +163,7 @@ app.get('/userstoretop5_api/:userid?', (req, res) => {
     });
 });
 
-app.get('/useritemtop5_api/:userid?', (req, res) => {
+app.get('/api/useritemtop5/:userid?', (req, res) => {
     const userid = req.params.userid;
     const query = `SELECT o.userid AS UserId
                     , i.id AS ItemId
@@ -187,7 +192,7 @@ app.get('/store/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'store.html'));
 });
 
-app.get('/store_api/:page?', (req, res) => {
+app.get('/api/store/:page?', (req, res) => {
     const query = 'SELECT * FROM stores';
 
     db.all(query, (err, rows) => {
@@ -210,7 +215,7 @@ app.get('/storedetail/:storeId?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'storedetail.html'));
 });
 
-app.get('/storedetail_api/:storeId?', (req, res) => {
+app.get('/api/storedetail/:storeId?', (req, res) => {
   const storeId = req.params.storeId;
   
   const query = `SELECT s.id AS StoreId
@@ -241,7 +246,7 @@ app.get('/storedaily/:storeId/:orderAt?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'storedaily.html'));
 });
 
-app.get('/storedaily_api/:storeId/:orderAt?', (req, res) => {
+app.get('/api/storedaily/:storeId/:orderAt?', (req, res) => {
   const storeId = req.params.storeId;
   const orderAt = req.params.orderAt;
   
@@ -268,7 +273,7 @@ app.get('/storedaily_api/:storeId/:orderAt?', (req, res) => {
   });
 });
 
-app.get('/storeregular_api/:storeId/:orderAt?', (req, res) => {
+app.get('/api/storeregular/:storeId/:orderAt?', (req, res) => {
   const storeId = req.params.storeId;
   const orderAt = req.params.orderAt;
   
@@ -302,7 +307,7 @@ app.get('/item/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'item.html'));
 });
 
-app.get('/item_api/:page?', (req, res) => {
+app.get('/api/item/:page?', (req, res) => {
     const query = 'SELECT * FROM items';
 
     db.all(query, (err, rows) => {
@@ -325,7 +330,7 @@ app.get('/itemdetail/:itemid?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'itemdetail.html'));
 });
 
-app.get('/itemdetail_api/:itemid?', (req, res) => {
+app.get('/api/itemdetail/:itemid?', (req, res) => {
   const itemid = req.params.itemid;
 
   const query = `SELECT oi.itemid AS ItemId
@@ -356,7 +361,7 @@ app.get('/orderitem/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'orderitem.html'));
 });
 
-app.get('/orderitem_api/:page?', (req, res) => {
+app.get('/api/orderitem/:page?', (req, res) => {
   const query = 'SELECT * FROM orderitems';
 
   db.all(query, (err, rows) => {
@@ -380,7 +385,7 @@ app.get('/order/:page?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'order.html'));
 });
 
-app.get('/order_api/:page?', (req, res) => {
+app.get('/api/order/:page?', (req, res) => {
   const query = 'SELECT * FROM orders';
 
   db.all(query, (err, rows) => {
@@ -403,7 +408,7 @@ app.get('/orderdetail/:orderId?', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'orderdetail.html'));
 });
 
-app.get('/orderdetail_api/:orderId?', (req, res) => {
+app.get('/api/orderdetail/:orderId?', (req, res) => {
   const orderId = req.params.orderId;
   const query = `SELECT * FROM orders WHERE id = '${orderId}'`;
   

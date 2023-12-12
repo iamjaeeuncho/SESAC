@@ -3,27 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 
-    fetchOrderItemData(page);
+    fetchOrderData(page);
 });
 
-// Function to fetch orderitem data
-function fetchOrderItemData(page) {
-    fetch(`/orderitem_api/${page}`)
+// Function to fetch order data
+function fetchOrderData(page) {
+    fetch(`/api/order/${page}`)
     .then(handleResponse)
     .then(data => {
-        const tableBody = document.getElementById('orderItemTableBody');
+        const tableBody = document.getElementById('orderTableBody');
         tableBody.innerHTML = '';
 
-        data.currPageRows.forEach(orderitem => {
+        data.currPageRows.forEach(order => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${orderitem.Id}</td>
-                <td><a href="/orderdetail/${orderitem.OrderId}">${orderitem.OrderId}</a></td>
-                <td><a href="/itemdetail/${orderitem.ItemId}">${orderitem.ItemId}</a></td>
+                <td><a href="/orderdetail/${order.Id}">${order.Id}</a></td>
+                <td>${order.OrderAt}</td>
+                <td>${order.StoreId}</td>
+                <td>${order.UserId}</td>
             `;
             tableBody.appendChild(row);
         });
-        renderPaginationLinks(data, 'fetchOrderItemData');
+        renderPaginationLinks(data, 'fetchOrderData');
     })
     .catch(handleError);
 }

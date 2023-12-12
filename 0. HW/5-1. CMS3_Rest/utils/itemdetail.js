@@ -3,38 +3,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = new URL(window.location.href);
     const page = url.pathname.split('/')[2] || 1;
 
-    fetchStoreDetailData(page);
+    fetchItemDetailData(page);
 });
 
-// Function to fetch store detail results
-function fetchStoreDetailData(Id) {
-    fetch(`/storedetail_api/${Id}`)
+// Function to fetch item detail data
+function fetchItemDetailData(Id) {
+    fetch(`/api/itemdetail/${Id}`)
     .then(handleResponse)
     .then(data => {
-        const tableBody = document.getElementById('StoreDetailTableBody');
+        // Item Information
+        const tableBody = document.getElementById('ItemDetailTableBody');
         tableBody.innerHTML = '';
 
-        // Store Information
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${data[1].StoreName}</td>
-            <td>${data[1].StoreType}</td>
-            <td>${data[1].StoreAddress}</td>`;
+            <td>${data[0].ItemName}</td>
+            <td>${data[0].UnitPrice}</td>
+            `;
         tableBody.appendChild(row);
         
         // Monthly Sales
-        const tableBodySales = document.getElementById('StoreSalesTableBody');
-        tableBodySales.innerHTML = '';
+        const tableBodyDetail = document.getElementById('ItemMonthlySalesTableBody');
+        tableBodyDetail.innerHTML = '';
 
         for (let i in data) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><a href=/storedaily/${data[1].StoreId}/${data[i].OrderAt}>${data[i].OrderAt}</a></td>
-                <td>${data[i].TotalSales}</td>
+                <td>${data[i].OrderAt}</td>
+                <td>${data[i].TotalPrice}</td>
                 <td>${data[i].OrderNum}</td>
                 `;
-            tableBodySales.appendChild(row);
+            tableBodyDetail.appendChild(row);
         }
+
     })
     .catch(handleError);
 }

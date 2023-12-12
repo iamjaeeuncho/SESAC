@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to fetch item detail data
 function fetchOrderDetailData(Id) {
-    fetch(`/orderdetail_api/${Id}`)
+    fetch(`/api/orderdetail/${Id}`)
     .then(handleResponse)
     .then(data => {
         console.log(data)

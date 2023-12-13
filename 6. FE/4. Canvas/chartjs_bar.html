@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BarGraph With Chart.js</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body>
+        <canvas id="barGraph" width="400" height="200"></canvas>
+
+        <script>
+            var ctx = document.getElementById('barGraph').getContext('2d');
+            var barGraph = new Chart(ctx, {
+                // type: 'bar',
+                type: 'line',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [
+                        {
+                            label: 'Data',
+                            data: [12, 19, 3, 5, 2, 3],
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            // backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange'],
+                            backgroundColor: 'rgba(0, 123,255, 0.5)',
+                            fill: true,
+                        }
+                    ]
+                },
+                options: {},
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image</title>
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="textCanvas" width="400" height="400"></canvas>
+
+        <script>
+            const canvas = document.getElementById("textCanvas");
+            const context = canvas.getContext("2d");
+
+            const player = {
+                x: 150,
+                y: 400 - 60,
+                speed: 10,
+            };
+
+            const fallingStar = {
+                x: 200,
+                y: 0,
+                speed: 2,
+            }
+
+            const imageUfo = new Image();
+            imageUfo.src = "./image/ufo.png";
+            imageUfo.onload = function() {
+                draw();
+            };
+
+            const imageStar = new Image();
+            imageStar.src = "star.png";
+            imageStar.onload = function() {
+                draw();
+            };
+
+            function draw() {
+                // 화면 초기화
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                // 원하는 위치에 원하는 크기
+                context.drawImage(imageUfo, player.x, player.y, 60, 60);
+
+                // 위에서 내려오게 구현
+                context.drawImage(imageStar, fallingStar.x, fallingStar.y, 30, 30);
+
+                fallingStar.y += fallingStar.speed;
+
+                if (fallingStar.y > canvas.height) {
+                    fallingStar.y = 0;
+                    fallingStar.x = Math.random() * (canvas.width - 60);
+                }
+
+                // 반복 애니메이션 수행
+                requestAnimationFrame(draw);
+            }
+
+            // 최초 애니메이션 수행
+            draw();
+
+            // 키보드 이벤트 처리
+            window.addEventListener('keydown', (e) => {
+                // console.log(e.key);
+                switch (e.key) {
+                    case "ArrowLeft":
+                        player.x -= player.speed;
+                        break;
+                    case "ArrowRight":
+                        player.x += player.speed;
+                        break;
+                    case "ArrowUp":
+                        player.x -= player.speed;
+                        break;
+                    case "ArrowDown":
+                        player.x -= player.speed;
+                        break;
+
+                }
+            })
+        </script>
+    </body>
+</html>

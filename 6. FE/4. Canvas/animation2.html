@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas 2</title>
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="textCanvas" width="400" height="400"></canvas>
+
+        <script>
+            const canvas = document.getElementById("textCanvas");
+            const context = canvas.getContext("2d");
+
+            const ball = {
+                x: 50,
+                y: 50,
+                radius: 20,
+                dx: 2,          // 초기 X축 이동 속도
+                dy: 0,          // 초기 Y축 이동 속도
+                gravity: 0.2,   // 적절한 가속도
+                bounce: 0.9,    // 튕김 계수
+            }
+
+            function drawBall() {
+                context.clearRect(0, 0, canvas.width, canvas.height)
+
+                context.beginPath();
+                context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                context.fillStyle = "#0095DD"
+                context.fill();
+                context.closePath();
+
+                // 중력 적용
+                ball.dy += ball.gravity;
+
+                // 공 이동
+                ball.y += ball.dy;
+                ball.x += ball.dx;
+
+                // 캔버스 경계 도달 튕기는 효과
+                if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                    ball.dx = -ball.dx;
+                }
+
+                if(ball.y + ball.radius > canvas.height) {
+                    ball.y = canvas.height - ball.radius;
+                    ball.dy = -ball.dy * ball.bounce; 
+
+                    if (Math.abs(ball.dy) < 0.1) {
+                        ball.dy = 0;
+                    }
+                }
+                requestAnimationFrame(drawBall);
+            }
+            
+            drawBall();
+        </script>
+    </body>
+</html>

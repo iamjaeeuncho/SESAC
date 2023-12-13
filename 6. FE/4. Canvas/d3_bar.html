@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BarGraph With Chart.js</title>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <style>
+            /* 선택적 스타일링 */
+            rect {
+                fill: steelblue;
+            }
+            text {
+                font-size: 12px;
+                fill: white;
+                text-anchor: middle;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <script>
+            // 데이터셋 정의
+            const dataset = [10, 20, 30, 40, 50];
+
+            // svg 요소 정의
+            const svgWidth = 300;
+            const svgHeight = 150;
+            const svg = d3.select('body').append('svg').attr('width', svgWidth).attr('height', svgHeight);
+
+            // 막대 그래프 그리기
+            svg.selectAll('rect')
+                .data(dataset)
+                .enter()
+                .append('rect')
+                .attr('x', (d, i) => i * 60)
+                .attr('y', (d) => svgHeight - d)
+                .attr('width', 50)
+                .attr('height', (d) => d)
+
+            // 막대 그래프에 텍스트 추가
+            svg.selectAll('text')
+                .data(dataset)
+                .enter()
+                .append('text')
+                .text((d) => d)
+                .attr('x', (d, i) => i * 60 + 25)
+                .attr('y', (d) => svgHeight - d + 15)
+                .attr('text-anchor', 'middle')
+        </script>
+    </body>
+</html>

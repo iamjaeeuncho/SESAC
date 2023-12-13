@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+    </head>
+    <body>
+        <canvas id="myCanvas" width="400" height="400"></canvas>
+        
+        <script>
+            // Canvas 가져오기
+            const canvas = document.getElementById("myCanvas");
+            const context = canvas.getContext("2d");
+
+            // 사각형 그리기
+            context.fillStyle = "#0000FF"
+            context.fillRect(50, 50, 100, 80) // X, Y, Width, Height
+
+            // 선 그리기
+            context.strokeStyle = "#FF0000"
+            context.lineWidth = 2;
+            context.beginPath();
+            context.moveTo(200, 50); // 시작점
+            context.lineTo(300, 130); // 끝 점 설정
+            context.stroke();
+
+            // 원 그리기
+            context.fillStyle = "#00FF00";
+            context.beginPath();
+            context.arc(350, 100, 30, 0, 2 * Math.PI); // X, Y, Radius, StartAngle, EndAngle
+            context.fill();
+            
+        </script>
+    </body>
+</html>

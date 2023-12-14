@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Map</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+         crossorigin=""/>
+         <style>
+            #map {
+                height: 600px;
+            }
+         </style>
+    </head>
+    <body>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+        <div>
+            <label for="start">출발지(Lat, Lon)</label>
+            <input type="text" id="start" placeholder="예: 에버랜드" />
+            <br />
+            <label for="end">도착지(Lat, Lon)</label>
+            <input type="text" id="end" placeholder="예: 롯데월드" />
+            <br />
+            <button onclick="findRoute()">경로 찾기</button>
+        </div>
+
+        <div id="map"></div>
+
+        <script>
+            // 지도 로딩시 센터 위치와 해상도 크기
+            var map = L.map('map').setView([37.578, 126.977], 10);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                // attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            function findRoute() {
+                var startInput = document.getElementById('start').value;
+                var endInput = document.getElementById('end').value;
+                
+                let startCoord, endCoord;
+
+                if (!startInput || !endInput) {
+                    alert('출발지와 목적지 좌표를 모두 다 입력해주세요');
+                    return;
+                }
+
+                // 입력값 기반 쿼리
+                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + startInput)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        startCoord = [data[0].lat, data[0].lon]
+                        console.log(startCoord)
+                    })
+
+                // 입력값 기반 쿼리
+                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + endInput)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        endCoord = [data[0].lat, data[0].lon]
+                        console.log(endCoord)
+
+                        // 경로 표시
+                        var route = L.polyline([startCoord, endCoord], { color: 'blue' }).addTo(map);
+                        map.fitBounds(route.getBounds());
+                    })
+                }            
+        </script>
+    </body>
+</html>

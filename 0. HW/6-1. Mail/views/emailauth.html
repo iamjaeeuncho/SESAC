@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>이메일 인증</title>
+    </head>
+    <body>
+        <h1>회원가입</h1>
+        
+        <div class="form-container" id="formContainer">
+            <form id="emailForm">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="button" onclick="emailSubmit()">전송</button>
+            </form>
+        </div>
+
+        <script>
+            function emailSubmit() {
+                var email = document.getElementById("email").value;
+                fetch(`/api/sendEmail?email=${email}`)
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>

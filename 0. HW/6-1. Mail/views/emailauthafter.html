@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>이메일 인증</title>
+    </head>
+    <body>
+        <h1>회원가입</h1>
+        
+        <div class="form-container" id="formContainer">
+            이메일로 인증 코드가 발송되었습니다
+            <form id="authForm">
+                <label for="auth">인증번호:</label>
+                <input type="text" id="auth" name="auth" required>
+                <button type="button" onclick="authSubmit()">전송</button>
+            </form>
+        </div>
+
+        <div id="output"></div>
+
+        <script>
+            function authSubmit() {
+                var auth = document.getElementById("auth").value;
+
+                fetch(`/api/authNum?auth=${auth}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    
+                    var outputDiv = document.getElementById("output");
+                    outputDiv.innerHTML = `${data}`;
+                    outputDiv.style.display = "block";
+                })
+            }
+        </script>
+    </body>
+</html>

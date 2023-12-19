@@ -1,11 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const port = 5000;
 
 app.use(morgan('dev'))
+app.use(express.static(path.join(__dirname, 'build')));
 
 // 모든 출처에 대한 허용 but 보안적으로는 좋지 않지만 쉬움
 // app.use(cors())
@@ -29,6 +31,10 @@ const data = [
     {id: 2, name: 'Itme 2'},
     {id: 3, name: 'Itme 3'},
 ]
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+})
 
 app.get('/api/data', (req, res) => {
     // res.json({ message: 'Hello From Express Server'})

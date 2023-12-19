@@ -5,4 +5,4 @@ JavaScript Full Stack Course
 * JAVASCRIPT
 * NODEJS
 * DB
-* React
+* REACT

@@ -17,7 +17,7 @@ function submitSearch() {
 
 // Function to fetch user data
 function fetchUserData(page) {
-    fetch(`/api/user/${page}`)
+    fetch(`/api/user/list/${page}`)
         .then(handleResponse)
         .then(data => {
             const tableBody = document.getElementById('userTableBody');
@@ -42,7 +42,7 @@ function fetchUserData(page) {
 
 // Function to fetch search results
 function fetchSearch(page, name, gender) {
-    fetch(`api/search/${page}/?name=${name}&gender=${gender}`)
+    fetch(`api/search/list/${page}/?name=${name}&gender=${gender}`)
         .then(handleResponse)
         .then(data => {
             const tableBody = document.getElementById('userTableBody');

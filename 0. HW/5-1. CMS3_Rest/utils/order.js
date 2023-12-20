@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to fetch order data
 function fetchOrderData(page) {
-    fetch(`/api/order/${page}`)
+    fetch(`/api/order/list/${page}`)
     .then(handleResponse)
     .then(data => {
         const tableBody = document.getElementById('orderTableBody');

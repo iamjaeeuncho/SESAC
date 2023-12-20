@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to fetch user detail data
 function fetchUserDetailData(Id) {
-    fetch(`/api/userdetail/${Id}`)
+    fetch(`/api/userdetail/list/${Id}`)
     .then(handleResponse)
     .then(data => {
         // User information
@@ -45,7 +45,7 @@ function fetchUserDetailData(Id) {
 
 // Function to fetch user store top5 data
 function fetchUserStoreTop5(Id) {
-    fetch(`/api/userstoretop5/${Id}`)
+    fetch(`/api/userdetail/userstoretop5/${Id}`)
     .then(handleResponse)
     .then(data => {
         const tableBodyDetail = document.getElementById('UserStoreTop5TableBody');
@@ -66,7 +66,7 @@ function fetchUserStoreTop5(Id) {
 
 // Function to fetch user item top5 data
 function fetchUserItemTop5(Id) {
-    fetch(`/api/useritemtop5/${Id}`)
+    fetch(`/api/userdetail/useritemtop5/${Id}`)
     .then(handleResponse)
     .then(data => {
         const tableBodyDetail = document.getElementById('UserItemTop5TableBody');

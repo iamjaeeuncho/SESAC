@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function fetchItemData(page) {
-    fetch(`/api/item/${page}`)
+    fetch(`/api/item/list/${page}`)
     .then(handleResponse)
     .then(data => {
         const tableBody = document.getElementById('itemTableBody');

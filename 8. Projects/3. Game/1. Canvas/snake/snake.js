@@ -17,6 +17,29 @@ function draw() {
   drawFood();
 
   moveSnake();
+  checkFood();
+  checkCollision()
+}
+
+// 충돌 함수 구현
+function checkCollision() {
+  const head = snake[0]; // 뱀의 머리
+
+  if (head.x < 0 || head.x * blockSize > canvasSize - blockSize || (head.y < 0 && head.y * blockSize > canvasSize - blockSize)) {
+    console.log('죽음')
+  }
+}
+
+// 뱀이 음식을 먹었는지 확인
+function checkFood() {
+  const head = snake[0]; // 뱀의 머리
+  
+  if (head.x === food.x && head.y === food.y) {
+    console.log('냠냠')
+    food = generateFood()
+  } else {
+    snake.pop(); // 음식 먹지 않으면 꼬리 짜르기
+  }
 }
 
 function drawSnake() {
@@ -78,12 +101,13 @@ function moveSnake() {
   if (head.x < 0 || head.x * blockSize > canvasSize - blockSize || (head.y < 0 && head.y * blockSize > canvasSize - blockSize)) {
     return;
   }
-  // 벗어나지 않았다면 머리 추가
-  snake.unshift(head);
+  
+  snake.unshift(head); // 벗어나지 않았다면 뱀 머리 추가
+  // snake.pop() // 꼬리 제거
 
-  if (snake.length > snakeLength) {
-    snake.pop();
-  }
+  // if (snake.length > snakeLength) {
+  //   snake.pop(); // 꼬리 제거
+  // }
 }
 
 document.addEventListener("keydown", handleKeyPress);

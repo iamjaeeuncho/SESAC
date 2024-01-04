@@ -8,11 +8,24 @@ const snakeSpeed = 200; // 뱀 이동 속도(밀리초)
 let snake = [ { x: 0, y: 0 }, ] // 초기 뱀 위치
 let food = generateFood();
 let direction = "right"; // 뱀 이동 방향
-let snakeLength = 3;
+let directionBuffer = []; // 키 입력 버퍼
+let snakeLength = 5;
+let gameover = false;
+let lastKeyPressTime = 0; // 최종 키 입력 시간
 
 // 화면에 그리기 - 반복적으로 호출할 메인 함수
 function draw() {
   context.clearRect(0, 0, canvasSize, canvasSize); // 화면 초기화
+
+  if (gameover) {
+    context.fillStyle = '#F00';
+    context.font = '30px Arial';
+    context.fillText('Game Over', 80, canvasSize / 2);
+    context.font = '20px Arial';
+    context.fillText('Retry? Press Y', 100, canvasSize / 2 + 40);
+    return;
+  }
+
   drawSnake();
   drawFood();
 
@@ -25,14 +38,32 @@ function draw() {
 function checkCollision() {
   const head = snake[0]; // 뱀의 머리
 
-  if (head.x < 0 || head.x * blockSize > canvasSize - blockSize || (head.y < 0 && head.y * blockSize > canvasSize - blockSize)) {
-    console.log('죽음')
+  if (head.x < 0 || head.x * blockSize > canvasSize - blockSize ||
+      head.y < 0 && head.y * blockSize > canvasSize - blockSize ||
+      isSnakeCollision()) {
+    console.log('게임오버');
+    gameover = true;
   }
+}
+
+// 뱀이 자기 자신과 부딪칠 때
+function isSnakeCollision() {
+  const head = snake[0];
+
+  let isCollision = false;
+  snake.forEach((segment, index) => {
+    if (index > 0 && segment.x === head.x && segment.y === head.y) {
+      isCollision = true;
+    }
+  })
+  return isCollision
+
+  // return snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
 }
 
 // 뱀이 음식을 먹었는지 확인
 function checkFood() {
-  const head = snake[0]; // 뱀의 머리
+  const head = snake[0];
   
   if (head.x === food.x && head.y === food.y) {
     console.log('냠냠')
@@ -83,6 +114,10 @@ function isFoodOnSnake(foodPosition) {
 function moveSnake() {
   const head = { ...snake[0] };
 
+  if (directionBuffer.length > 0) {
+    direction = directionBuffer.shift();
+  }
+
   switch (direction) {
     case "up":
       head.y -= 1;
@@ -98,10 +133,6 @@ function moveSnake() {
       break;
   }
 
-  if (head.x < 0 || head.x * blockSize > canvasSize - blockSize || (head.y < 0 && head.y * blockSize > canvasSize - blockSize)) {
-    return;
-  }
-  
   snake.unshift(head); // 벗어나지 않았다면 뱀 머리 추가
   // snake.pop() // 꼬리 제거
 
@@ -112,22 +143,63 @@ function moveSnake() {
 
 document.addEventListener("keydown", handleKeyPress);
 
+function resetGame() {
+  snake = [ { x: 0, y: 0 }];
+  direction = 'right'
+  food = generateFood();
+  gameover = false;
+}
+
 function handleKeyPress(event) {
+
+  if (gameover) {
+    if (event.key.toLowerCase() === 'y') {
+      resetGame();
+    }
+    return;
+  }
+  // const now = Date.now();
+  // const timeSinceLastKeyPress = now - lastKeyPressTime;
+  // console.log(timeSinceLastKeyPress)
+
+  // if (timeSinceLastKeyPress < snakeSpeed) {
+    // console.log('이 키 입력 무시')
+    // return;
+  // }
+
+  if (directionBuffer.length >= 2) {
+    console.log('너무 많은 키 입력 대기중', directionBuffer)
+    return;
+  }
+
+  let previousKeyPress = direction;
+  if (directionBuffer.length > 0) {
+    previousKeyPress = directionBuffer[directionBuffer.length - 1];
+  }
+
   switch (event.key) {
     case "ArrowUp":
-      direction = "up";
+      if (previousKeyPress !== 'down') {
+        directionBuffer.push('up')
+      }
       break;
     case "ArrowDown":
-      direction = "down";
+      if (previousKeyPress !== 'up') {
+        directionBuffer.push('down')
+      }
       break;
     case "ArrowLeft":
-      direction = "left";
+      if (previousKeyPress !== 'right') {
+        directionBuffer.push('left')
+      }
       break;
     case "ArrowRight":
-      direction = "right";
+      if (previousKeyPress !== 'up') {
+        directionBuffer.push('right')
+      }
       break;
   }
-  //   direction = event.key.toLowerCase().replace("arrow", "");
+  // direction = event.key.toLowerCase().replace("arrow", "");
 }
 
 setInterval(draw, snakeSpeed);

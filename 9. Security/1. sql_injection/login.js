@@ -41,7 +41,7 @@ app.post("/login", (req, res) => {
   const { username, password } = req.body;
   // 로그인하는 쿼리문 구현
   // const query = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
-  const query = `SELECT * FROM users WHERE username=? AND password=?`;
+  const query = `SELECT * FROM users WHERE username= ? AND password= ?`;
 
   // 쿼리문으로 DB 확인
   db.get(query, [username, password], (err, row) => {

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>게시글 작성</title>
+  </head>
+  <body>
+    <h1>글 작성</h1>
+    <form method="post" action="/write">
+      <label for="title">제목</label>
+      <input type="text" id="title" name="title" required />
+      <br />
+      <label for="content">내용</label>
+      <textarea id="context" name="content" cols="30"></textarea>
+      <br />
+      <button type="submit">작성</button>
+    </form>
+  </body>
+  <a href="/">홈으로</a>
+</html>

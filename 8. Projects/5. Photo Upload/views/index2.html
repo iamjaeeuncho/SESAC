@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>게시판</title>
+    <style>
+      table {
+        width: 100%;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #e0e0e0;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>게시판</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>내용</th>
+          <th>사진</th>
+          <th>작성일</th>
+          <th>삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ post.title }}</td>
+          <td>{{ post.content }}</td>
+          <td>
+            {% if post.thumbnailpath %}
+            <a href="images/{{ post.filename }}" target="_blank">
+              <img src="{{post.thumbnailpath}}"
+            /></a>
+            {% else %} (없음) {% endif %}
+          </td>
+          <td>{{ post.date | formatPostDate }}</td>
+          <td>
+            <form method="post" action="/delete/{{ loop.index }}">
+              <button type="submit">삭제</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="/write">글 작성</a>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>대시보드</title>
+  </head>
+  <body>
+    <h1>로그인 완료</h1>
+
+    {% if messages %}
+    <div style="color: green">{{ messages }}</div>
+    <div style="color: green">{{ messages.success[0] }}</div>
+    {% endif %}
+
+    <h2>사용자 정보</h2>
+    {% for key, value in user %}
+    <li>{{ key }}: {{ value }}</li>
+    {% endfor %}
+  </body>
+</html>

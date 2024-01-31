@@ -4,7 +4,11 @@ const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
-const debug = require("debug")("upload");
+
+const debug = require("debug");
+const debugS = new debug("myapp:server");
+const debugU = new debug("myapp:upload");
+const debugR = new debug("myapp:request");
 
 const app = express();
 const port = 3000;
@@ -33,6 +37,11 @@ nunjucks
 // 게시글 담기위한 변수
 let posts = [];
 
+app.use((req, res, next) => {
+  debugR("요청 왔음");
+  next();
+});
+
 app.get("/", (req, res) => {
   res.render("index2", { posts }); // post=posts를 {}로 대체
 });
@@ -54,7 +63,7 @@ const upload = multer({
   },
 });
 
-// debug.enabled = true; // 디버그 기능 온오프
+debug.enabled = true; // 디버그 기능 온오프
 
 app.post("/write", upload.single("photo"), (req, res) => {
   const title = req.body.title;
@@ -73,7 +82,7 @@ app.post("/write", upload.single("photo"), (req, res) => {
 
   posts.push({ title, content, filepath, filename, thumbnailpath, date });
   // console.log(posts)
-  debug(posts);
+  debugU(posts);
 
   // 썸네일 생성
   if (filepath) {
@@ -117,5 +126,6 @@ app.post("/delete/:index", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`${port} 서버 레디 `);
+  console.log(`서버 레디`);
+  debugS(`포트 ${port} 서버 레디`);
 });

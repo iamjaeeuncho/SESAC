@@ -6,3 +6,4 @@ JavaScript Full Stack Course
 * NODEJS
 * DB
 * REACT
+* SECURITY
